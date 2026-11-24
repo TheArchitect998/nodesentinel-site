@@ -1,0 +1,64 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+import CodeBlock from '../../../components/CodeBlock.astro';
+---
+
+<DocsLayout lang="en" title="Native & systemd" description="Build the dashboard and agents directly on Linux and run them as hardened systemd services.">
+  <h2>Prerequisites</h2>
+  <p>Go 1.24 or newer is required on each build host. Python is not required for the current Go version.</p>
+  <CodeBlock lang="en" code={`go version
+git clone https://github.com/TheArchitect998/NodeSentinel.git /opt/nodesentinel
+cd /opt/nodesentinel
+mkdir -p bin
+go build -o bin/nodesentinel ./cmd/nodesentinel`} />
+
+  <h2>Configure the dashboard</h2>
+  <ol class="steps">
+    <li><h3>Copy the sample files</h3><CodeBlock lang="en" code={`cp .env.example .env
+cp nodesentinel.config.example.json nodesentinel.config.json
+chmod 600 .env nodesentinel.config.json`} /></li>
+    <li><h3>Complete the configuration</h3><p>Set the bind address, port, state directory and named push agents.</p><CodeBlock lang="en" title=".env" language="env" code={`NODESENTINEL_DASHBOARD_HOST=127.0.0.1
+NODESENTINEL_DASHBOARD_PORT=8888
+NODESENTINEL_DASHBOARD_CONFIG=./nodesentinel.config.json
+NODESENTINEL_STATE_DIR=/opt/nodesentinel/state`} /></li>
+    <li><h3>Create state storage and set the password</h3><p>Run the setup command as the same unprivileged user that will run the dashboard service.</p><CodeBlock lang="en" code={`sudo install -d -o user -g user -m 0700 /opt/nodesentinel/state
+set -a
+source .env
+set +a
+./bin/nodesentinel dashboard setup`} /></li>
+    <li><h3>Test the start</h3><CodeBlock lang="en" code={`./bin/nodesentinel dashboard`} /><p>Open <code>http://localhost:8888</code> locally and sign in.</p></li>
+  </ol>
+
+  <h2>Dashboard as a systemd service</h2>
+  <CodeBlock lang="en" code={`sudo cp systemd/nodesentinel.service.example \\
+  /etc/systemd/system/nodesentinel.service
+sudo nano /etc/systemd/system/nodesentinel.service`} />
+  <p>In particular, check <code>User=</code>, <code>WorkingDirectory=</code> and the absolute path of the protected <code>EnvironmentFile=</code>. Then start it:</p>
+  <CodeBlock lang="en" code={`sudo systemctl daemon-reload
+sudo systemctl enable --now nodesentinel.service
+sudo systemctl status nodesentinel.service`} />
+
+  <h2>Agent on every host</h2>
+  <ol><li>Build the same binary.</li><li>Copy <code>nodesentinel-agent.env.example</code> to <code>nodesentinel-agent.env</code>.</li><li>Enter the agent name, key and HTTPS/WebSocket address of the dashboard.</li><li>Test the connection once in the foreground.</li></ol>
+  <CodeBlock lang="en" title="nodesentinel-agent.env" language="env" code={`NODESENTINEL_AGENT_NAME=HomeLab1
+NODESENTINEL_AGENT_KEY=a-strong-random-key
+NODESENTINEL_HUB_URL=wss://monitor.example.com`} />
+  <h3>Protect the service account and configuration</h3>
+  <CodeBlock lang="en" code={`sudo useradd --system --user-group --no-create-home \\
+  --shell /usr/sbin/nologin nodesentinel
+sudo install -o nodesentinel -g nodesentinel -m 0600 \\
+  nodesentinel-agent.env /etc/nodesentinel-agent.env
+sudo cp systemd/nodesentinel-agent.service.example \\
+  /etc/systemd/system/nodesentinel-agent.service`} />
+  <p>Check the unit file and paths, then enable the agent:</p>
+  <CodeBlock lang="en" code={`sudo systemctl daemon-reload
+sudo systemctl enable --now nodesentinel-agent.service
+sudo journalctl -u nodesentinel-agent.service -f`} />
+
+  <h2>Optional system sources</h2>
+  <p>Docker, journal, UFW, Fail2Ban and SMART remain opt-in. Use the supplied <code>sudoers</code> fragment only after review and adjust the user and actual program paths:</p>
+  <CodeBlock lang="en" code={`sudo install -m 0440 systemd/nodesentinel.sudoers \\
+  /etc/sudoers.d/nodesentinel
+sudo visudo -cf /etc/sudoers.d/nodesentinel`} />
+  <div class="callout warning"><strong>Keep hardening intact</strong><p>The supplied unit sets <code>NoNewPrivileges=yes</code>, preventing sudo from escalating privileges later. For privileged sources, use a tightly scoped helper or a consciously reviewed service override.</p></div>
+</DocsLayout>

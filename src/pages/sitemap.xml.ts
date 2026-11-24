@@ -1,7 +1,8 @@
 import { flatDocsNavigation } from '../data/navigation';
 
 export async function GET() {
-  const pages = ['/', ...flatDocsNavigation.map((item) => item.href), '/impressum/', '/datenschutz/'];
+  const germanPages = ['/', ...flatDocsNavigation.map((item) => item.href), '/impressum/', '/datenschutz/'];
+  const pages = [...germanPages, ...germanPages.map((path) => path === '/' ? '/en/' : `/en${path}`)];
   const urls = pages
     .map((path) => `<url><loc>https://nodesentinel.de${path}</loc></url>`)
     .join('');

@@ -1,0 +1,35 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout lang="en" title="Documentation" description="Everything you need to install, securely operate and configure NodeSentinel—from the first container to detailed alerts.">
+  <p class="lead">NodeSentinel is a self-hosted monitoring dashboard for Linux systems. It collects system, Docker and security metrics and can notify you of issues through several channels.</p>
+  <div class="callout"><strong>Local control</strong><p>The dashboard server and your history run in your infrastructure. NodeSentinel does not need a SaaS platform for normal operation and sends no telemetry to the vendor.</p></div>
+
+  <h2>How NodeSentinel works together</h2>
+  <p>The central dashboard runs on a Linux host. A lightweight agent runs on each monitored system. New installations use push mode: the agent opens an authenticated WebSocket connection to the dashboard and sends measurements outbound. HTTP pull mode remains available for existing installations.</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Component</th><th>Purpose</th><th>Recommended port</th></tr></thead>
+    <tbody>
+      <tr><td>Dashboard</td><td>Web interface, storage, availability checks and alerts</td><td>8888, bound locally</td></tr>
+      <tr><td>Push agent</td><td>Collects host metrics and events and connects to the dashboard</td><td>No inbound port</td></tr>
+      <tr><td>Reverse proxy</td><td>HTTPS certificate and optional public access</td><td>443</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>Choose the right installation method</h2>
+  <div class="doc-cards">
+    <a class="doc-card" href="/en/docs/docker/"><strong>Docker Compose</strong><span>The quickest start with ready-to-use AMD64 and ARM64 images.</span></a>
+    <a class="doc-card" href="/en/docs/nativ/"><strong>Native & systemd</strong><span>A Go binary and system services directly on your Linux host.</span></a>
+    <a class="doc-card" href="/en/docs/reverse-proxy/"><strong>HTTPS & proxy</strong><span>Caddy, nginx or Traefik for protected network access.</span></a>
+    <a class="doc-card" href="/en/docs/konfiguration/"><strong>Configuration</strong><span>Agents, checks, history and optional integrations.</span></a>
+  </div>
+
+  <h2>System requirements</h2>
+  <ul class="check-list">
+    <li><strong>Docker:</strong> Docker Engine and the Compose plugin. A local Go installation is not required.</li>
+    <li><strong>Native:</strong> Linux and Go 1.24 or newer to build the binary.</li>
+    <li><strong>Architectures:</strong> Linux AMD64 and ARM64 are supported.</li>
+    <li><strong>Optional:</strong> UFW, Fail2Ban, Docker and SMART are only read when explicitly enabled.</li>
+  </ul>
+</DocsLayout>

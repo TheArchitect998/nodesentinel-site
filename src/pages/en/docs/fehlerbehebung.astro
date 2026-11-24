@@ -1,0 +1,46 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+import CodeBlock from '../../../components/CodeBlock.astro';
+---
+
+<DocsLayout lang="en" title="Troubleshooting" description="Systematically isolate and fix common connection, permission and proxy errors.">
+  <h2>All agents are offline</h2>
+  <ol><li>Check the agent process or container.</li><li>Compare the agent name and key with the dashboard entry.</li><li>Check DNS, the TLS certificate and reachability of the <code>wss://</code> address.</li><li>At the reverse proxy, verify that WebSocket upgrades are allowed.</li></ol>
+  <CodeBlock lang="en" code={`sudo systemctl status nodesentinel-agent.service
+sudo journalctl -u nodesentinel-agent.service -n 100 --no-pager
+curl -I https://monitor.example.com`} />
+
+  <h2>Dashboard or agent logs</h2>
+  <CodeBlock lang="en" code={`sudo journalctl -u nodesentinel.service -n 100 -f
+sudo journalctl -u nodesentinel-agent.service -n 100 -f
+
+# Docker Compose
+docker compose logs --tail=100 -f dashboard
+docker compose -f compose.agent.yaml logs --tail=100 -f agent`} />
+
+  <h2>UFW or Fail2Ban is missing</h2>
+  <p>Check both the tool and permissions on the agent host:</p>
+  <CodeBlock lang="en" code={`sudo -n ufw status
+sudo -n fail2ban-client status`} />
+  <p>The appropriate enable flag and required mounts or sudo rules must be set. The hardened systemd unit intentionally prevents privilege escalation through sudo; do not remove <code>NoNewPrivileges</code> without a security review.</p>
+
+  <h2>Docker containers are missing</h2>
+  <CodeBlock lang="en" code={`docker ps -a
+docker inspect nodesentinel-agent`} />
+  <p>Set <code>NODESENTINEL_ENABLE_DOCKER=1</code> and mount the Docker socket only if the root-equivalent trust boundary is acceptable. Restart the agent container after making changes.</p>
+
+  <h2>HTTPS cannot be opened in the browser</h2>
+  <ol><li>Test DNS resolution from the client.</li><li>Check that the domain points to the proxy, not to the internal dashboard port.</li><li>Test port 443 from the client and port 8888 directly from the proxy host.</li><li>Use HTTP as the backend scheme in the proxy if the dashboard runs unencrypted internally.</li><li>Enable WebSocket support at the proxy.</li></ol>
+  <CodeBlock lang="en" code={`nslookup monitor.example.com
+curl -v https://monitor.example.com
+curl http://DASHBOARD-IP:8888/`} />
+
+  <h2>Port is already in use</h2>
+  <CodeBlock lang="en" code={`sudo lsof -i :8888
+# alternatively
+sudo ss -ltnp | grep 8888`} />
+  <p>Stop the competing process in a controlled manner or change the port mapping in the dashboard environment and proxy. Never blindly force-kill an unknown process.</p>
+
+  <h2>History stops after disconnection</h2>
+  <p>NodeSentinel does not buffer agent measurements across an offline period. After reconnection, history resumes with the current sample. Check network outages, proxy timeouts, system time and agent restarts. Event coverage is additionally limited by the source system's retention period.</p>
+</DocsLayout>

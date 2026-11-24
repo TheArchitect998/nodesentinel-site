@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../data/site';
+---
+
+<BaseLayout lang="en" title="Privacy – NodeSentinel" description="Privacy information about the processing of personal data on nodesentinel.de.">
+  <section class="legal-page">
+    <div class="shell legal-wrap prose">
+      <p class="eyebrow">Legal</p>
+      <h1>Privacy Policy</h1>
+      <p>This notice explains which personal data is processed when you visit <strong>nodesentinel.de</strong> and which rights you have.</p>
+
+      <h2>1. Controller</h2>
+      <p>
+        {site.legal.operator}<br />
+        {site.legal.address.map((line) => <>{line}<br /></>)}
+        Email: <a href={`mailto:${site.legal.privacyEmail}`}>{site.legal.privacyEmail}</a>
+      </p>
+      <details class="reveal-contact"><summary>Phone</summary><a href="tel:+4915152291217">{site.legal.internationalPhone}</a></details>
+
+      <h2>2. No tracking, no cookies</h2>
+      <p>This website uses <strong>no cookies, tracking or analytics tools</strong>. When you visit the site, I do not independently collect, store or analyse any personal profiles. Cookie consent is therefore not required.</p>
+
+      <h2>3. Server log files</h2>
+      <p>For technical reasons, the hosting provider processes information in server log files when the website is accessed, including the requested page, date and time, HTTP status, amount of data transferred, browser identifier, referrer and IP address. An IP address is personal data.</p>
+      <p>I do not have direct access to these log files and do not combine them with other data sources. Processing is used to deliver the website, analyse errors, and defend against and investigate attacks. The legal basis is Article 6(1)(f) GDPR (legitimate interest in secure and stable operation). Log files are automatically deleted after a short period.</p>
+
+      <h2>4. Hosting</h2>
+      <p>This website is delivered statically through <strong>GitHub Pages</strong>. The hosting provider is {site.legal.host}. Connection data may be transferred to the United States. The legal basis is Article 6(1)(f) GDPR (secure and efficient operation of the website). GitHub is certified under the EU-US Data Privacy Framework. The transfer is limited to the technical connection data described in section 3.</p>
+
+      <h2>5. Domain and DNS</h2>
+      <p>The domain nodesentinel.de is registered with {site.legal.domainRegistrar}. DNS records are also managed there. Technical data required for name resolution is processed during DNS queries. The legal basis is Article 6(1)(f) GDPR.</p>
+
+      <h2>6. SSL/TLS encryption</h2>
+      <p>For security, this website uses SSL/TLS encryption. You can recognise an encrypted connection by <code>https://</code> in the browser address bar.</p>
+
+      <h2>7. External links</h2>
+      <p>This website links to external services, particularly GitHub. Clicking a link takes you away from this website; the privacy policy of the respective provider applies to its data processing. No third-party plugins or embedded content are used.</p>
+
+      <h2>8. Contact by email or phone</h2>
+      <p>If you contact me by email or phone, I process the information you provide to handle your request. The legal basis is Article 6(1)(b) GDPR where the request relates to a contract, and otherwise Article 6(1)(f) GDPR.</p>
+      <p>Emails are received and stored via mailbox.org operated by Heinlein Hosting GmbH, Schwedter Straße 8/9A, 10119 Berlin, Germany. The provider acts as a processor; its servers are located in Germany. Data is not shared for advertising purposes and is deleted once the purpose ceases to apply and no statutory retention obligations remain. No automated decision-making, including profiling, takes place.</p>
+
+      <h2>9. Your rights</h2>
+      <p>You have the right of access (Article 15 GDPR), rectification (Article 16), erasure (Article 17), restriction of processing (Article 18), data portability (Article 20), and objection to processing based on Article 6(1)(f) GDPR (Article 21). You may withdraw consent at any time with effect for the future. To exercise your rights, simply contact the email address shown above.</p>
+
+      <h2>10. Right to lodge a complaint</h2>
+      <p>You have the right to lodge a complaint with a data protection supervisory authority, in particular the Hamburg Commissioner for Data Protection and Freedom of Information, Ludwig-Erhard-Straße 22, 20459 Hamburg, or the authority at your place of residence.</p>
+
+      <h2>11. Requirement to provide data</h2>
+      <p>The technically necessary connection data must be processed for the website to be available. Providing any further data is not required by law or contract.</p>
+
+      <h2>12. Date</h2>
+      <p>As of: 24 November 2026. This notice will be updated if the website, services used or legal requirements change.</p>
+    </div>
+  </section>
+</BaseLayout>

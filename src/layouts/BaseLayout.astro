@@ -8,22 +8,51 @@ interface Props {
   description: string;
   image?: string;
   class?: string;
+  lang?: 'de' | 'en';
 }
 
-const { title, description, image = '/social-card.svg', class: className = '' } = Astro.props;
+const { title, description, image = '/social-card.svg', class: className = '', lang = 'de' } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const isEnglish = lang === 'en';
+const alternatePath = isEnglish
+  ? Astro.url.pathname.replace(/^\/en(?=\/|$)/, '') || '/'
+  : Astro.url.pathname === '/' ? '/en/' : `/en${Astro.url.pathname}`;
+const alternateLanguage = isEnglish ? 'de' : 'en';
+const homeHref = isEnglish ? '/en/' : '/';
+const docsHref = isEnglish ? '/en/docs/' : '/docs/';
+const quickStartHref = isEnglish ? '/en/docs/schnellstart/' : '/docs/schnellstart/';
+const imprintHref = isEnglish ? '/en/impressum/' : '/impressum/';
+const privacyHref = isEnglish ? '/en/datenschutz/' : '/datenschutz/';
+const copy = isEnglish ? {
+  skip: 'Skip to content', home: 'NodeSentinel home', nav: 'Main navigation', docs: 'Documentation',
+  start: 'Get started', menu: 'Open menu', mobileNav: 'Mobile navigation', quickStart: 'Quick start',
+  footerTagline: 'Self-hosted monitoring for the systems that matter to you.', project: 'Project',
+  legal: 'Legal', imprint: 'Imprint', privacy: 'Privacy', versions: 'Releases', report: 'Report a problem',
+  security: 'Security', switchLabel: 'Language', switchText: 'Deutsch'
+} : {
+  skip: 'Zum Inhalt springen', home: 'NodeSentinel Startseite', nav: 'Hauptnavigation', docs: 'Dokumentation',
+  start: 'Jetzt starten', menu: 'Menü öffnen', mobileNav: 'Mobile Navigation', quickStart: 'Schnellstart',
+  footerTagline: 'Selbst gehostetes Monitoring für Systeme, die dir wichtig sind.', project: 'Projekt',
+  legal: 'Rechtliches', imprint: 'Impressum', privacy: 'Datenschutz', versions: 'Versionen', report: 'Problem melden',
+  security: 'Sicherheit', switchLabel: 'Sprache', switchText: 'English'
+};
 ---
 
 <!doctype html>
-<html lang="de">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
     <meta name="theme-color" content="#07110d" />
     <link rel="canonical" href={canonicalURL} />
+    <link rel="alternate" hreflang={lang} href={canonicalURL} />
+    <link rel="alternate" hreflang={alternateLanguage} href={new URL(alternatePath, Astro.site)} />
+    <link rel="alternate" hreflang="x-default" href={new URL(isEnglish ? alternatePath : Astro.url.pathname, Astro.site)} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content={isEnglish ? 'en_US' : 'de_DE'} />
+    <meta property="og:locale:alternate" content={isEnglish ? 'de_DE' : 'en_US'} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonicalURL} />
@@ -32,26 +61,28 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <title>{title}</title>
   </head>
   <body class={className}>
-    <a class="skip-link" href="#inhalt">Zum Inhalt springen</a>
+    <a class="skip-link" href="#inhalt">{copy.skip}</a>
     <header class="site-header">
       <div class="shell header-inner">
-        <a class="brand" href="/" aria-label="NodeSentinel Startseite">
+        <a class="brand" href={homeHref} aria-label={copy.home}>
           <img class="brand-mark-image" src="/brand/nodesentinel-mark.svg" alt="" width="34" height="34" />
           <span>Node<span>Sentinel</span></span>
         </a>
-        <nav class="main-nav" aria-label="Hauptnavigation">
-          <a class:list={{ active: Astro.url.pathname.startsWith('/docs') }} href="/docs/">Dokumentation</a>
+        <nav class="main-nav" aria-label={copy.nav}>
+          <a class:list={{ active: Astro.url.pathname.includes('/docs/') }} href={docsHref}>{copy.docs}</a>
           <a href={site.repository} target="_blank" rel="noreferrer">GitHub <Icon name="external" size={14} /></a>
-          <a class="button button--small" href="/docs/schnellstart/">Jetzt starten <Icon name="arrow" size={16} /></a>
+          <a class="language-switch" href={alternatePath} lang={alternateLanguage} hreflang={alternateLanguage} aria-label={`${copy.switchLabel}: ${copy.switchText}`}>{copy.switchText}</a>
+          <a class="button button--small" href={quickStartHref}>{copy.start} <Icon name="arrow" size={16} /></a>
         </nav>
-        <button class="mobile-menu-button" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Menü öffnen">
+        <button class="mobile-menu-button" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label={copy.menu}>
           <Icon name="menu" size={24} />
         </button>
       </div>
-      <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile Navigation" hidden>
-        <a href="/docs/">Dokumentation</a>
-        <a href="/docs/schnellstart/">Schnellstart</a>
+      <nav class="mobile-nav" id="mobile-nav" aria-label={copy.mobileNav} hidden>
+        <a href={docsHref}>{copy.docs}</a>
+        <a href={quickStartHref}>{copy.quickStart}</a>
         <a href={site.repository}>GitHub</a>
+        <a href={alternatePath} lang={alternateLanguage} hreflang={alternateLanguage}>{copy.switchText}</a>
       </nav>
     </header>
 
@@ -62,25 +93,25 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <footer class="site-footer">
       <div class="shell footer-grid">
         <div>
-          <a class="brand" href="/"><img class="brand-mark-image" src="/brand/nodesentinel-mark.svg" alt="" width="34" height="34" /><span>Node<span>Sentinel</span></span></a>
-          <p>Selbst gehostetes Monitoring für Systeme, die dir wichtig sind.</p>
+          <a class="brand" href={homeHref}><img class="brand-mark-image" src="/brand/nodesentinel-mark.svg" alt="" width="34" height="34" /><span>Node<span>Sentinel</span></span></a>
+          <p>{copy.footerTagline}</p>
         </div>
         <div>
-          <h2>Dokumentation</h2>
-          <a href="/docs/schnellstart/">Schnellstart</a>
-          <a href="/docs/docker/">Docker Compose</a>
-          <a href="/docs/sicherheit/">Sicherheit</a>
+          <h2>{copy.docs}</h2>
+          <a href={quickStartHref}>{copy.quickStart}</a>
+          <a href={`${docsHref}docker/`}>Docker Compose</a>
+          <a href={`${docsHref}sicherheit/`}>{copy.security}</a>
         </div>
         <div>
-          <h2>Projekt</h2>
+          <h2>{copy.project}</h2>
           <a href={site.repository}>GitHub</a>
-          <a href={`${site.repository}/releases`}>Versionen</a>
-          <a href={`${site.repository}/issues`}>Problem melden</a>
+          <a href={`${site.repository}/releases`}>{copy.versions}</a>
+          <a href={`${site.repository}/issues`}>{copy.report}</a>
         </div>
         <div>
-          <h2>Rechtliches</h2>
-          <a href="/impressum/">Impressum</a>
-          <a href="/datenschutz/">Datenschutz</a>
+          <h2>{copy.legal}</h2>
+          <a href={imprintHref}>{copy.imprint}</a>
+          <a href={privacyHref}>{copy.privacy}</a>
         </div>
       </div>
       <div class="shell footer-bottom">

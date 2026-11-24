@@ -1,0 +1,73 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+import CodeBlock from '../../../components/CodeBlock.astro';
+---
+
+<DocsLayout lang="en" title="Docker Compose" description="Install, update and secure the NodeSentinel dashboard and agents with ready-to-use multi-architecture images.">
+  <h2>Prerequisites</h2>
+  <p>Install Docker Engine and the Docker Compose plugin following your Linux distribution's documentation. Check both commands:</p>
+  <CodeBlock lang="en" code={`docker --version
+docker compose version`} />
+  <p>The published images are named <code>thearchitect998/nodesentinel</code> and <code>thearchitect998/nodesentinel-agent</code>. Use a version tag instead of <code>latest</code> for reproducible deployments.</p>
+
+  <h2>Deploy the dashboard</h2>
+  <ol class="steps">
+    <li><h3>Prepare the files</h3><CodeBlock lang="en" code={`git clone https://github.com/TheArchitect998/NodeSentinel.git
+cd NodeSentinel
+cp nodesentinel.config.example.json nodesentinel.config.json
+chmod 600 nodesentinel.config.json`} /></li>
+    <li><h3>Edit the configuration</h3><p>Remove unused examples. Give every push agent a name and a unique random key.</p><CodeBlock lang="en" title="nodesentinel.config.json" language="json" code={`{
+  "agents": {
+    "HomeLab1": {
+      "mode": "push",
+      "key": "at-least-16-random-characters"
+    }
+  }
+}`} /></li>
+    <li><h3>Set the password and start</h3><CodeBlock lang="en" code={`docker compose pull
+docker compose run --rm dashboard /usr/local/bin/nodesentinel dashboard setup
+docker compose up -d
+docker compose ps`} /></li>
+  </ol>
+  <div class="callout"><strong>Back up state permanently</strong><p>The password, settings and SQLite databases are stored in the <code>dashboard-state</code> volume. Back it up regularly. <code>docker compose down -v</code> deletes it and therefore the history.</p></div>
+
+  <h2>Bind address and time zone</h2>
+  <p>By default, the container listens on <code>127.0.0.1:8888</code>. You can set <code>NODESENTINEL_BIND_ADDRESS</code>, <code>NODESENTINEL_PORT</code> and <code>NODESENTINEL_TIMEZONE</code> in the Compose environment. Recreate the container after making changes.</p>
+  <CodeBlock lang="en" title=".env" language="env" code={`NODESENTINEL_PORT=8888
+NODESENTINEL_TIMEZONE=Europe/Berlin
+# Only together with a firewall / reverse proxy:
+# NODESENTINEL_BIND_ADDRESS=192.168.1.50`} />
+
+  <h2>Agent with Compose</h2>
+  <p>Use <code>compose.agent.yaml</code> together with a protected <code>.env</code> on every monitored host.</p>
+  <CodeBlock lang="en" title=".env" language="env" code={`NODESENTINEL_AGENT_NAME=HomeLab1
+NODESENTINEL_AGENT_KEY=at-least-16-random-characters
+NODESENTINEL_HUB_URL=wss://monitor.example.com`} />
+  <CodeBlock lang="en" code={`chmod 600 .env
+docker compose -f compose.agent.yaml pull
+docker compose -f compose.agent.yaml up -d
+docker compose -f compose.agent.yaml ps`} />
+  <div class="callout warning"><strong>Grant optional access deliberately</strong><p>The agent starts with minimal privileges. Docker socket, host filesystem, journal, UFW, Fail2Ban and SMART are disabled by default. Docker socket access is effectively root access to the host.</p></div>
+
+  <h2>Dockhand or Portainer</h2>
+  <ol>
+    <li>Create the dashboard configuration on the Docker host first and grant the container user UID/GID 10001 read access.</li>
+    <li>Create a stack from the repository or the contents of <code>compose.yaml</code>.</li>
+    <li>If necessary, set the absolute path with <code>NODESENTINEL_CONFIG_PATH</code>.</li>
+    <li>After deployment, open the container console and run <code>/usr/local/bin/nodesentinel dashboard setup</code>.</li>
+    <li>Keep the stack name unchanged during replacement or updates so <code>dashboard-state</code> is reused.</li>
+  </ol>
+
+  <h2>Additional host sources</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Source</th><th>Required</th><th>Note</th></tr></thead>
+    <tbody>
+      <tr><td>Docker</td><td><code>NODESENTINEL_ENABLE_DOCKER=1</code> and socket mount</td><td>Root-equivalent permission</td></tr>
+      <tr><td>Host filesystem</td><td><code>NODESENTINEL_ENABLE_HOST_ROOT=1</code> and read-only mount</td><td>May expose sensitive files</td></tr>
+      <tr><td>SSH events</td><td>Journal mount and enable flag</td><td>May expose sensitive logs</td></tr>
+      <tr><td>UFW</td><td>Host network, NET_ADMIN and UFW mount</td><td>NET_ADMIN is a privileged capability</td></tr>
+      <tr><td>Fail2Ban</td><td>Socket mount and enable flag</td><td>Socket allows administrative commands</td></tr>
+      <tr><td>S.M.A.R.T.</td><td>Enable flag, SYS_RAWIO and device access</td><td>Does not wake disks in standby</td></tr>
+    </tbody>
+  </table></div>
+</DocsLayout>

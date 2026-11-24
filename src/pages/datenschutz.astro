@@ -14,9 +14,12 @@ import { site } from '../data/site';
       <p>
         {site.legal.operator}<br />
         {site.legal.address.map((line) => <>{line}<br /></>)}
-        E-Mail: <a href={`mailto:${site.legal.privacyEmail}`}>{site.legal.privacyEmail}</a><br />
-        Telefon: <a href="tel:+4915152291217">{site.legal.internationalPhone}</a>
+        E-Mail: <a href={`mailto:${site.legal.privacyEmail}`}>{site.legal.privacyEmail}</a>
       </p>
+      <details class="reveal-contact">
+        <summary>Telefon</summary>
+        <a href="tel:+4915152291217">{site.legal.internationalPhone}</a>
+      </details>
 
       <h2>2. Kein Tracking, keine Cookies</h2>
       <p>Diese Website verwendet <strong>keine Cookies, kein Tracking und keine Analyse-Tools</strong>. Ich erhebe, speichere oder werte beim Besuch der Seite selbst keine personenbezogenen Profile aus. Eine Cookie-Einwilligung ist daher nicht erforderlich.</p>

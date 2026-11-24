@@ -17,9 +17,12 @@ import { site } from '../data/site';
 
       <h2>Kontakt</h2>
       <p>
-        E-Mail: <a href={`mailto:${site.legal.email}`}>{site.legal.email}</a><br />
-        Telefon: <a href="tel:+4915152291217">{site.legal.internationalPhone}</a>
+        E-Mail: <a href={`mailto:${site.legal.email}`}>{site.legal.email}</a>
       </p>
+      <details class="reveal-contact">
+        <summary>Telefon</summary>
+        <a href="tel:+4915152291217">{site.legal.internationalPhone}</a>
+      </details>
 
       <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
       <p>{site.legal.operator}, Anschrift wie oben.</p>

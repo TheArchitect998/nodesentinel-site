@@ -1,31 +1,38 @@
 ---
 import BaseLayout from './BaseLayout.astro';
 import Icon from '../components/Icon.astro';
-import { docsNavigation, flatDocsNavigation } from '../data/navigation';
+import { docsNavigation, englishDocsNavigation, flatDocsNavigation, flatEnglishDocsNavigation } from '../data/navigation';
 import { site } from '../data/site';
 
 interface Props {
   title: string;
   description: string;
+  lang?: 'de' | 'en';
 }
 
-const { title, description } = Astro.props;
-const currentIndex = flatDocsNavigation.findIndex((item) => item.href === Astro.url.pathname);
-const previous = flatDocsNavigation[currentIndex - 1];
-const next = flatDocsNavigation[currentIndex + 1];
+const { title, description, lang = 'de' } = Astro.props;
+const isEnglish = lang === 'en';
+const navigation = isEnglish ? englishDocsNavigation : docsNavigation;
+const flatNavigation = isEnglish ? flatEnglishDocsNavigation : flatDocsNavigation;
+const currentIndex = flatNavigation.findIndex((item) => item.href === Astro.url.pathname);
+const previous = flatNavigation[currentIndex - 1];
+const next = flatNavigation[currentIndex + 1];
+const copy = isEnglish
+  ? { docs: 'Documentation', unclear: 'Something unclear?', improve: 'Help make the documentation better.', issue: 'Open a GitHub issue', eyebrow: 'NodeSentinel documentation', pageNav: 'Page navigation', previous: 'Previous', next: 'Next' }
+  : { docs: 'Dokumentation', unclear: 'Etwas unklar?', improve: 'Hilf mit, die Dokumentation besser zu machen.', issue: 'GitHub Issue öffnen', eyebrow: 'NodeSentinel Dokumentation', pageNav: 'Seiten-Navigation', previous: 'Zurück', next: 'Weiter' };
 ---
 
-<BaseLayout title={`${title} · NodeSentinel Dokumentation`} description={description}>
+<BaseLayout title={`${title} · NodeSentinel ${copy.docs}`} description={description} lang={lang}>
   <div class="docs-topbar">
     <div class="shell">
-      <span>Dokumentation</span>
+      <span>{copy.docs}</span>
       <span class="docs-version">{site.version}</span>
     </div>
   </div>
   <div class="shell docs-layout">
     <aside class="docs-sidebar">
-      <nav aria-label="Dokumentation">
-        {docsNavigation.map((group) => (
+      <nav aria-label={copy.docs}>
+        {navigation.map((group) => (
           <div class="docs-nav-group">
             <h2>{group.label}</h2>
             {group.items.map((item) => (
@@ -35,23 +42,23 @@ const next = flatDocsNavigation[currentIndex + 1];
         ))}
       </nav>
       <div class="sidebar-note">
-        <strong>Etwas unklar?</strong>
-        <p>Hilf mit, die Dokumentation besser zu machen.</p>
-        <a href={`${site.repository}/issues`}>GitHub Issue öffnen <Icon name="external" size={14} /></a>
+        <strong>{copy.unclear}</strong>
+        <p>{copy.improve}</p>
+        <a href={`${site.repository}/issues`}>{copy.issue} <Icon name="external" size={14} /></a>
       </div>
     </aside>
     <article class="docs-content">
       <header class="docs-heading">
-        <p class="eyebrow">NodeSentinel Dokumentation</p>
+        <p class="eyebrow">{copy.eyebrow}</p>
         <h1>{title}</h1>
         <p>{description}</p>
       </header>
       <div class="prose">
         <slot />
       </div>
-      <nav class="page-navigation" aria-label="Seiten-Navigation">
-        {previous ? <a href={previous.href}><span>Zurück</span><strong>{previous.label}</strong></a> : <span></span>}
-        {next ? <a class="next" href={next.href}><span>Weiter</span><strong>{next.label}</strong></a> : null}
+      <nav class="page-navigation" aria-label={copy.pageNav}>
+        {previous ? <a href={previous.href}><span>{copy.previous}</span><strong>{previous.label}</strong></a> : <span></span>}
+        {next ? <a class="next" href={next.href}><span>{copy.next}</span><strong>{next.label}</strong></a> : null}
       </nav>
     </article>
   </div>

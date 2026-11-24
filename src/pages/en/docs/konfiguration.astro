@@ -1,0 +1,46 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+import CodeBlock from '../../../components/CodeBlock.astro';
+---
+
+<DocsLayout lang="en" title="Configuration" description="Manage agents, understand metrics, check availability and control data retention.">
+  <h2>Add or remove agents</h2>
+  <p>The dashboard configuration contains named agents. In push mode, every agent needs its own name and key.</p>
+  <CodeBlock lang="en" title="nodesentinel.config.json" language="json" code={`{
+  "agents": {
+    "HomeLab1": {
+      "mode": "push",
+      "key": "random-key-for-homelab1"
+    },
+    "Legacy-NAS": {
+      "url": "https://nas.example.com:9100",
+      "key": "stored-legacy-key",
+      "ca_cert": "/opt/nodesentinel/certs/nas.crt"
+    }
+  }
+}`} />
+  <p>Restart the dashboard after changes. If you remove an entry, that agent can no longer authenticate.</p>
+  <CodeBlock lang="en" code={`sudo systemctl restart nodesentinel.service
+# or with Compose:
+docker compose restart dashboard`} />
+
+  <h2>System metrics and history</h2>
+  <p>Resources are stored once per minute and retained for 30 days. The browser refreshes the view every 15 seconds. Alongside CPU, memory and filesystems, NodeSentinel shows available data from these areas:</p>
+  <ul><li>Temperatures, swap and drive I/O</li><li>Traffic rates for each network interface</li><li>NVIDIA GPU data through <code>nvidia-smi</code></li><li>ZFS pools through <code>zpool</code></li><li>Battery state and S.M.A.R.T. health when available</li></ul>
+  <p>Loopback and typical virtual Docker interfaces are excluded from network rates. For containerised agents, network values describe the container namespace by default.</p>
+
+  <h2>Docker metrics</h2>
+  <p>After Docker access is explicitly enabled, NodeSentinel reads status, start times, restarts, CPU, memory and network usage per container. Network values are based on Docker counters and are approximate at very low traffic levels.</p>
+
+  <h2>Availability checks</h2>
+  <p>Checks run once per minute directly in the dashboard worker. A target is considered unavailable after two failed runs.</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Type</th><th>Target</th><th>Success criterion</th></tr></thead>
+    <tbody><tr><td>HTTP</td><td>URL</td><td>Status below 400; certificates are verified</td></tr><tr><td>TCP</td><td>Host and port</td><td>A TCP connection is established</td></tr><tr><td>Ping</td><td>Host or IP</td><td>ICMP reply</td></tr><tr><td>DNS</td><td>Hostname</td><td>Name can be resolved</td></tr></tbody>
+  </table></div>
+  <p>Outages are not stored as long-term history. Alerts and recoveries are sent to the selected channels.</p>
+
+  <h2>Data and backups</h2>
+  <p>Settings, login credentials and SQLite databases are stored in the dashboard state directory. Protect and back up that directory or the corresponding Docker volume. Run exactly one dashboard worker so writes do not compete.</p>
+  <ul class="check-list"><li><strong>Resource history:</strong> 30 days</li><li><strong>Temperature and event data for reports:</strong> approximately 25 hours</li><li><strong>Offline periods:</strong> Missing agent measurements are not recreated after reconnection.</li></ul>
+</DocsLayout>

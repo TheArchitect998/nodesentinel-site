@@ -38,3 +38,33 @@ export const docsNavigation: NavigationGroup[] = [
 ];
 
 export const flatDocsNavigation = docsNavigation.flatMap((group) => group.items);
+
+export const englishDocsNavigation: NavigationGroup[] = [
+  {
+    label: 'Getting started',
+    items: [
+      { href: '/en/docs/', label: 'Overview' },
+      { href: '/en/docs/schnellstart/', label: 'Quick start' },
+    ],
+  },
+  {
+    label: 'Installation',
+    items: [
+      { href: '/en/docs/docker/', label: 'Docker Compose' },
+      { href: '/en/docs/nativ/', label: 'Native & systemd' },
+      { href: '/en/docs/reverse-proxy/', label: 'HTTPS & Reverse Proxy' },
+    ],
+  },
+  {
+    label: 'Operations',
+    items: [
+      { href: '/en/docs/konfiguration/', label: 'Configuration' },
+      { href: '/en/docs/benachrichtigungen/', label: 'Notifications' },
+      { href: '/en/docs/sicherheit/', label: 'Security' },
+      { href: '/en/docs/aktualisierung/', label: 'Updates' },
+      { href: '/en/docs/fehlerbehebung/', label: 'Troubleshooting' },
+    ],
+  },
+];
+
+export const flatEnglishDocsNavigation = englishDocsNavigation.flatMap((group) => group.items);

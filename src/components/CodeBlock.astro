@@ -3,16 +3,20 @@ interface Props {
   title?: string;
   language?: string;
   code: string;
+  lang?: 'de' | 'en';
 }
 
-const { title, language = 'bash', code } = Astro.props;
+const { title, language = 'bash', code, lang = 'de' } = Astro.props;
+const copy = lang === 'en'
+  ? { copy: 'Copy', copied: 'Copied' }
+  : { copy: 'Kopieren', copied: 'Kopiert' };
 const id = `copy-${Math.random().toString(36).slice(2)}`;
 ---
 
 <div class="code-block">
   <div class="code-block__bar">
     <span>{title ?? language}</span>
-    <button class="copy-button" type="button" data-copy-target={id}>Kopieren</button>
+    <button class="copy-button" type="button" data-copy-target={id} data-copied-label={copy.copied} data-copy-label={copy.copy}>{copy.copy}</button>
   </div>
   <pre><code id={id} class={`language-${language}`}>{code}</code></pre>
 </div>
@@ -23,8 +27,8 @@ const id = `copy-${Math.random().toString(36).slice(2)}`;
       const target = document.getElementById(button.dataset.copyTarget ?? '');
       if (!target) return;
       await navigator.clipboard.writeText(target.textContent ?? '');
-      button.textContent = 'Kopiert';
-      window.setTimeout(() => (button.textContent = 'Kopieren'), 1600);
+      button.textContent = button.dataset.copiedLabel ?? button.textContent;
+      window.setTimeout(() => (button.textContent = button.dataset.copyLabel ?? button.textContent), 1600);
     });
   });
 </script>

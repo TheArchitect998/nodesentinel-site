@@ -1,0 +1,57 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+import CodeBlock from '../../../components/CodeBlock.astro';
+---
+
+<DocsLayout lang="en" title="HTTPS & Reverse Proxy" description="Publish the dashboard with TLS, forward WebSocket upgrades and enable secure cookies behind a trusted proxy.">
+  <h2>Recommended topology</h2>
+  <p>Run NodeSentinel locally on <code>127.0.0.1:8888</code>. A reverse proxy terminates HTTPS and forwards browser and WebSocket traffic. Restrict direct access to the dashboard port with a firewall.</p>
+  <div class="callout warning"><strong>No open HTTP</strong><p>Unencrypted HTTP exposes login credentials, session cookies, agent keys and measurements. Even LAN-only environments should use HTTPS.</p></div>
+
+  <h2>Caddy</h2>
+  <CodeBlock lang="en" title="Caddyfile" language="caddy" code={`monitor.example.com {
+    reverse_proxy 127.0.0.1:8888
+}`} />
+  <p>Caddy supports WebSocket upgrades automatically and can manage public TLS certificates.</p>
+
+  <h2>nginx</h2>
+  <CodeBlock lang="en" title="/etc/nginx/sites-available/nodesentinel" language="nginx" code={`server {
+    listen 443 ssl;
+    server_name monitor.example.com;
+
+    ssl_certificate     /etc/ssl/monitor.example.com.crt;
+    ssl_certificate_key /etc/ssl/monitor.example.com.key;
+
+    location /api/agent/connect {
+        proxy_pass http://127.0.0.1:8888;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location / {
+        proxy_pass http://127.0.0.1:8888;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}`} />
+
+  <h2>Traefik</h2>
+  <p>Forward the domain through a TLS router to <code>http://127.0.0.1:8888</code>. Traefik sets forwarded-protocol headers and supports WebSocket traffic.</p>
+
+  <h2>Trusted proxies</h2>
+  <p>For the dashboard to securely determine that the original connection uses HTTPS, the proxy source IP or network must be explicitly trusted. This ensures session cookies are correctly marked <code>Secure</code>.</p>
+  <CodeBlock lang="en" title=".env" language="env" code={`NODESENTINEL_TRUSTED_PROXIES=127.0.0.1,172.18.0.0/16`} />
+  <p>Forwarded headers from all untrusted sources are discarded. Do not use trust settings such as <code>0.0.0.0/0</code>.</p>
+
+  <h2>Agent address</h2>
+  <p>The push agent receives only the external encrypted WebSocket address. Ensure the agent can resolve the domain and reach port 443.</p>
+  <CodeBlock lang="en" code={`curl -I https://monitor.example.com
+openssl s_client -connect monitor.example.com:443 -servername monitor.example.com`} />
+
+  <h2>Private certificate authorities</h2>
+  <p>For your own certificate authority, mount only the public CA certificate into the agent. Set its path with <code>NODESENTINEL_HUB_CA_CERT</code>. The dashboard or proxy private key must never reach an agent host.</p>
+</DocsLayout>

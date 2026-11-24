@@ -1,0 +1,137 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+import { site } from '../../data/site';
+---
+
+<BaseLayout lang="en" title="NodeSentinel – Monitoring for your homelab" description="Self-hosted Linux monitoring for CPU, RAM, temperatures, Docker, security and notifications. Easy installation with Docker or natively.">
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="shell hero-grid">
+      <div class="hero-copy">
+        <div class="release-pill"><span></span>Open source · Self-hosted · {site.version}</div>
+        <p class="eyebrow">One dashboard. All your systems.</p>
+        <h1>Your homelab.<br /><span>A clear picture.</span></h1>
+        <p class="hero-lead">NodeSentinel monitors your Linux systems, containers and availability—without requiring the cloud and with all your data under your control.</p>
+        <div class="hero-actions">
+          <a class="button" href="/en/docs/schnellstart/">Install now <Icon name="arrow" /></a>
+          <a class="button button--secondary" href={site.repository}><Icon name="github" />View on GitHub</a>
+        </div>
+        <div class="hero-proof">
+          <span><Icon name="check" size={16} />AMD64 & ARM64</span>
+          <span><Icon name="check" size={16} />No telemetry</span>
+          <span><Icon name="check" size={16} />30-day history</span>
+        </div>
+      </div>
+      <div class="dashboard-preview" aria-label="NodeSentinel dashboard preview">
+        <div class="preview-window">
+          <div class="preview-topbar">
+            <div class="window-dots"><i></i><i></i><i></i></div>
+            <span>nodesentinel.local</span>
+            <b>● LIVE</b>
+          </div>
+          <div class="preview-sidebar"><span class="preview-logo">N</span><i class="active"></i><i></i><i></i><i></i><i></i></div>
+          <div class="preview-main">
+            <div class="preview-heading"><div><span>OVERVIEW</span><strong>Good day.</strong></div><button>+ Host</button></div>
+            <div class="metric-cards">
+              <div><span>CPU</span><strong>18<small>%</small></strong><svg viewBox="0 0 120 35"><path d="M0 26 12 22 24 25 36 13 48 18 60 8 72 15 84 11 96 17 108 5 120 9"/></svg></div>
+              <div><span>Memory</span><strong>6.2<small>GB</small></strong><svg viewBox="0 0 120 35"><path d="M0 28 14 25 28 26 42 20 56 22 70 17 84 18 98 12 120 14"/></svg></div>
+              <div><span>Systems</span><strong>8<small>/8</small></strong><p class="all-online">● All online</p></div>
+            </div>
+            <div class="preview-hosts">
+              <div class="preview-card-title"><strong>Systems</strong><span>Updated 4 seconds ago</span></div>
+              {[
+                ['HomeServer', 'online', '24%', '41°'],
+                ['Docker-NAS', 'online', '38%', '37°'],
+                ['Pi-Gateway', 'online', '12%', '48°'],
+                ['Backup-Node', 'online', '5%', '35°'],
+              ].map(([name, status, cpu, temp]) => (
+                <div class="host-row"><span class="status-dot"></span><div><strong>{name}</strong><small>{status}</small></div><div class="tiny-bars"><i style={`height:${cpu}`}></i><i style={`height:${temp}`}></i></div><b>{cpu}</b><b>{temp}</b><span class="kebab">•••</span></div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div class="floating-alert"><span><Icon name="bell" size={18} /></span><div><strong>Everything is in the green</strong><small>All eight systems are reachable</small></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats-strip"><div class="shell">
+    <div><strong>30</strong><span>days of history</span></div>
+    <div><strong>15 s</strong><span>auto-refresh</span></div>
+    <div><strong>7+</strong><span>alert channels</span></div>
+    <div><strong>0</strong><span>cloud services required</span></div>
+  </div></section>
+
+  <section class="section">
+    <div class="shell">
+      <div class="section-heading centered">
+        <p class="eyebrow">Everything important at a glance</p>
+        <h2>Monitoring without the baggage.</h2>
+        <p>Focused on what homelabs, small servers and personal infrastructure really need.</p>
+      </div>
+      <div class="feature-grid">
+        <article class="feature-card feature-card--wide">
+          <span class="feature-icon"><Icon name="chart" size={24} /></span>
+          <h3>Real-time system metrics</h3>
+          <p>CPU, RAM, filesystems, temperatures, network, drives and more. Resource history remains available for 30 days.</p>
+          <div class="mini-chart"><svg viewBox="0 0 600 140" preserveAspectRatio="none"><defs><linearGradient id="fill-en" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#62e89b" stop-opacity=".3"/><stop offset="1" stop-color="#62e89b" stop-opacity="0"/></linearGradient></defs><path class="area" style="fill:url(#fill-en)" d="M0 100 40 88 80 95 120 60 160 74 200 36 240 62 280 53 320 70 360 42 400 58 440 30 480 45 520 22 560 40 600 15V140H0Z"/><path class="line" d="M0 100 40 88 80 95 120 60 160 74 200 36 240 62 280 53 320 70 360 42 400 58 440 30 480 45 520 22 560 40 600 15"/></svg></div>
+        </article>
+        <article class="feature-card">
+          <span class="feature-icon"><Icon name="box" size={24} /></span>
+          <h3>Understand Docker</h3>
+          <p>Container status, restarts, uptime, plus CPU, RAM and network usage per container.</p>
+          <div class="container-list"><span><i class="running"></i>nginx-proxy <b>Running</b></span><span><i class="running"></i>home-assistant <b>Running</b></span><span><i class="paused"></i>postgres <b>2 Restarts</b></span></div>
+        </article>
+        <article class="feature-card">
+          <span class="feature-icon"><Icon name="bell" size={24} /></span>
+          <h3>Alerts that arrive</h3>
+          <p>Telegram, Discord, Ntfy, Pushover, email, webhook or Gotify—individually or in parallel.</p>
+          <div class="notification-stack"><span>Telegram</span><span>Discord</span><span>Ntfy</span><span>+4</span></div>
+        </article>
+        <article class="feature-card feature-card--wide">
+          <span class="feature-icon"><Icon name="shield" size={24} /></span>
+          <h3>Security without detours</h3>
+          <p>UFW and Fail2Ban status, SSH events, optional SMART checks, plus encrypted and authenticated agent connections.</p>
+          <div class="security-items"><span><Icon name="check" size={16} />Dedicated agent keys</span><span><Icon name="check" size={16} />TLS & certificate checks</span><span><Icon name="check" size={16} />Minimal permissions</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section install-section">
+    <div class="shell install-grid">
+      <div>
+        <p class="eyebrow">Online in a few minutes</p>
+        <h2>Installing NodeSentinel is this easy.</h2>
+        <p>Choose Docker Compose for the quickest start or install the compiled Go binaries natively under systemd.</p>
+        <ol class="install-steps">
+          <li><span>1</span><div><strong>Set up the dashboard</strong><small>Load the configuration, set a password and start.</small></div></li>
+          <li><span>2</span><div><strong>Connect agents</strong><small>Install on every host you want to monitor.</small></div></li>
+          <li><span>3</span><div><strong>Configure alerts</strong><small>Choose thresholds and your preferred channels.</small></div></li>
+        </ol>
+        <a class="text-link" href="/en/docs/docker/">Read the Docker guide <Icon name="arrow" size={18} /></a>
+      </div>
+      <div class="terminal-card">
+        <div class="terminal-title"><span></span><span></span><span></span><b>installation</b></div>
+        <CodeBlock lang="en" title="bash" code={`git clone https://github.com/TheArchitect998/NodeSentinel.git
+cd NodeSentinel
+cp nodesentinel.config.example.json nodesentinel.config.json
+
+docker compose pull
+docker compose run --rm dashboard \\
+  /usr/local/bin/nodesentinel dashboard setup
+docker compose up -d`} />
+        <div class="terminal-success"><Icon name="check" size={18} /><span>Dashboard ready at <code>http://localhost:8888</code></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section cta-section">
+    <div class="shell cta-box">
+      <div><p class="eyebrow">Your infrastructure. Your data.</p><h2>Ready for a clear overview?</h2><p>Get started in minutes with the detailed documentation.</p></div>
+      <a class="button" href="/en/docs/">Open documentation <Icon name="arrow" /></a>
+    </div>
+  </section>
+</BaseLayout>
