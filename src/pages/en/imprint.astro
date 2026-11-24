@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { site } from '../../data/site';
+---
+
+<BaseLayout lang="en" title="Imprint – NodeSentinel" description="Imprint and provider identification for the NodeSentinel documentation website.">
+  <section class="legal-page">
+    <div class="shell legal-wrap prose">
+      <p class="eyebrow">Legal</p>
+      <h1>Imprint</h1>
+
+      <h2>Information pursuant to Section 5 DDG</h2>
+      <p>{site.legal.operator}<br />{site.legal.address.map((line) => <>{line}<br /></>)}</p>
+
+      <h2>Contact</h2>
+      <p>Email: <a href={`mailto:${site.legal.email}`}>{site.legal.email}</a></p>
+      <details class="reveal-contact">
+        <summary>Phone</summary>
+        <a href="tel:+4915152291217">{site.legal.internationalPhone}</a>
+      </details>
+
+      <h2>Responsible for content under Section 18 (2) MStV</h2>
+      <p>{site.legal.operator}, address as above.</p>
+
+      <h2>Liability for content</h2>
+      <p>As a service provider, I am responsible for my own content on these pages under general law. Under Sections 8 to 10 DDG, however, I am not obliged to monitor transmitted or stored third-party information. If I become aware of legal violations, I will remove the relevant content immediately.</p>
+
+      <h2>Liability for links</h2>
+      <p>This website contains links to external third-party websites over whose content I have no influence. I cannot guarantee those third-party contents; the respective provider is always responsible. If I become aware of legal violations, I will remove such links immediately.</p>
+
+      <h2>Copyright</h2>
+      <p>Content and works created by the website operator are subject to German copyright law. Third-party contributions are identified as such. NodeSentinel itself is an open-source project; the project's respective licence and attribution terms apply to source code and contributions.</p>
+
+      <h2>Consumer dispute resolution</h2>
+      <p>I am neither willing nor obliged to participate in dispute resolution proceedings before a consumer arbitration board.</p>
+    </div>
+  </section>
+</BaseLayout>

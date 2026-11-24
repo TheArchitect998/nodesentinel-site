@@ -44,25 +44,25 @@ export const englishDocsNavigation: NavigationGroup[] = [
     label: 'Getting started',
     items: [
       { href: '/en/docs/', label: 'Overview' },
-      { href: '/en/docs/schnellstart/', label: 'Quick start' },
+      { href: '/en/docs/quick-start/', label: 'Quick start' },
     ],
   },
   {
     label: 'Installation',
     items: [
       { href: '/en/docs/docker/', label: 'Docker Compose' },
-      { href: '/en/docs/nativ/', label: 'Native & systemd' },
+      { href: '/en/docs/native/', label: 'Native & systemd' },
       { href: '/en/docs/reverse-proxy/', label: 'HTTPS & Reverse Proxy' },
     ],
   },
   {
     label: 'Operations',
     items: [
-      { href: '/en/docs/konfiguration/', label: 'Configuration' },
-      { href: '/en/docs/benachrichtigungen/', label: 'Notifications' },
-      { href: '/en/docs/sicherheit/', label: 'Security' },
-      { href: '/en/docs/aktualisierung/', label: 'Updates' },
-      { href: '/en/docs/fehlerbehebung/', label: 'Troubleshooting' },
+      { href: '/en/docs/configuration/', label: 'Configuration' },
+      { href: '/en/docs/notifications/', label: 'Notifications' },
+      { href: '/en/docs/security/', label: 'Security' },
+      { href: '/en/docs/updates/', label: 'Updates' },
+      { href: '/en/docs/troubleshooting/', label: 'Troubleshooting' },
     ],
   },
 ];

@@ -1,0 +1,33 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+import CodeBlock from '../../../components/CodeBlock.astro';
+---
+
+<DocsLayout lang="en" title="Updates" description="Update the dashboard and agents safely, migrate configuration and preserve existing history.">
+  <h2>Before every update</h2>
+  <ol><li>Review the release notes on GitHub.</li><li>Back up the dashboard state directory, including <code>settings.json</code> and both SQLite databases.</li><li>For Docker, check the project name and the <code>dashboard-state</code> volume in use.</li><li>Update one representative agent first or test in a staging instance.</li></ol>
+
+  <h2>Docker Compose</h2>
+  <CodeBlock lang="en" code={`git pull --ff-only
+docker compose pull
+docker compose up -d
+docker compose ps
+
+docker compose -f compose.agent.yaml pull
+docker compose -f compose.agent.yaml up -d`} />
+  <p>Prefer a fixed release tag for production deployments. If you retain the existing Compose project name, the existing history and password are reused.</p>
+
+  <h2>Native installation</h2>
+  <CodeBlock lang="en" code={`cd /opt/nodesentinel
+git pull --ff-only
+go build -o bin/nodesentinel ./cmd/nodesentinel
+sudo systemctl restart nodesentinel.service
+sudo systemctl restart nodesentinel-agent.service`} />
+  <p>A UI-only update can be made by replacing a compatible <code>frontend/index.html</code>. Back up the previous file; the dashboard reloads the HTML file on each page request.</p>
+
+  <h2>Post-update checks</h2>
+  <ul class="check-list"><li>Dashboard login works.</li><li>Push agents connect and send current values.</li><li>The existing 30-day history remains visible.</li><li>A notification test is delivered.</li><li>Optionally enabled Docker, journal, UFW and Fail2Ban sources remain available.</li></ul>
+
+  <h2>Migrating older versions</h2>
+  <ul><li><code>NODESENTINEL_*</code> variables are preferred; older <code>HOMELAB_*</code> names work as a fallback.</li><li>Transfer older Python configuration to <code>nodesentinel.config.json</code>. Python is no longer required.</li><li>When renaming a Compose project, set <code>COMPOSE_PROJECT_NAME</code> to the previous name to retain the existing volume.</li><li>Because the session cookie was renamed, you must sign in again after migration.</li><li>For push configuration, create a named agent with mode <code>push</code> and point the agent to the appropriate <code>wss://</code> address.</li></ul>
+</DocsLayout>

@@ -1,0 +1,36 @@
+---
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+import CodeBlock from '../../../components/CodeBlock.astro';
+---
+
+<DocsLayout lang="en" title="Notifications" description="Configure channels, choose temperature thresholds and enable daily infrastructure reports.">
+  <h2>Available channels</h2>
+  <p>Several providers can be enabled in parallel under <strong>Notifications</strong>. After every change, send the built-in test message.</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Channel</th><th>Required details</th></tr></thead>
+    <tbody><tr><td>Telegram</td><td>Bot token and chat ID</td></tr><tr><td>Discord</td><td>Webhook URL</td></tr><tr><td>Ntfy</td><td>Server, topic and optional credentials</td></tr><tr><td>Pushover</td><td>Application token and user key</td></tr><tr><td>Email</td><td>SMTP server, port, TLS mode, sender, recipient and optional login</td></tr><tr><td>Webhook</td><td>URL and optional bearer token</td></tr><tr><td>Gotify</td><td>Server URL and application token</td></tr></tbody>
+  </table></div>
+  <p>Saved secrets are no longer displayed in plain text after saving. If a secret field remains blank while editing, its existing value is retained.</p>
+
+  <h2>Webhook payload</h2>
+  <CodeBlock lang="en" title="POST body" language="json" code={`{
+  "source": "nodesentinel",
+  "message": "The complete message",
+  "text": "Compatible short form"
+}`} />
+  <p>If a token is configured, it is sent as <code>Authorization: Bearer &lt;token&gt;</code>.</p>
+
+  <h2>Temperature warnings</h2>
+  <ol><li>Enable at least one notification channel.</li><li>Set a threshold for each host.</li><li>Enable temperature warnings under <strong>Temperature and daily report</strong>.</li></ol>
+  <p>After a threshold is exceeded, a warning is repeated every five minutes. A recovery notification follows when the temperature drops below the threshold again.</p>
+
+  <h2>Hardware warnings</h2>
+  <p>Hardware warnings are optional. They require S.M.A.R.T. data and/or ZFS status from the agent. Among other things, NodeSentinel checks failed integrity tests, new or uncorrectable sectors, NVMe warnings and ZFS pools that are not <code>ONLINE</code>.</p>
+  <p>A message is sent when the list of problems changes, and again when all problems disappear. Unchanged problems do not produce repeated messages.</p>
+
+  <h2>Daily report</h2>
+  <p>Select a time in the dashboard process time zone. After that time, NodeSentinel creates a report for each host and channel covering the previous 24 hours. Missing temperature or event coverage is identified. If delivery fails, the dashboard retries later that day; duplicate delivery is possible.</p>
+
+  <h2>Event data</h2>
+  <ul><li><strong>SSH and Fail2Ban:</strong> require readable journal files.</li><li><strong>Docker:</strong> requires explicitly enabled Docker socket access.</li><li><strong>Repetition:</strong> event cursors survive restarts.</li><li><strong>Limitation:</strong> events that have expired or were discarded by the source system cannot be reconstructed.</li></ul>
+</DocsLayout>
