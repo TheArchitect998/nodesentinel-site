@@ -1,0 +1,61 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+---
+
+<DocsLayout title="Schnellstart" description="Dashboard und ersten Agenten mit der empfohlenen Docker-Compose-Installation in wenigen Schritten verbinden.">
+  <ol class="steps">
+    <li>
+      <h3>Repository herunterladen</h3>
+      <p>Die Repository-Dateien enthalten die beiden Compose-Definitionen und alle Beispielkonfigurationen.</p>
+      <CodeBlock code={`git clone https://github.com/TheArchitect998/NodeSentinel.git
+cd NodeSentinel`} />
+    </li>
+    <li>
+      <h3>Agent im Dashboard registrieren</h3>
+      <p>Kopiere die Beispielkonfiguration und ersetze Name und Schlüssel. Verwende einen eigenen starken Schlüssel mit mindestens 16 Zeichen.</p>
+      <CodeBlock title="nodesentinel.config.json" language="json" code={`{
+  "agents": {
+    "HomeLab1": {
+      "mode": "push",
+      "key": "HIER_EINEN_ZUFALLSSCHLUESSEL_EINTRAGEN"
+    }
+  }
+}`} />
+      <CodeBlock code={`cp nodesentinel.config.example.json nodesentinel.config.json
+chmod 600 nodesentinel.config.json
+openssl rand -base64 32`} />
+    </li>
+    <li>
+      <h3>Passwort initialisieren und Dashboard starten</h3>
+      <CodeBlock code={`docker compose pull
+docker compose run --rm dashboard /usr/local/bin/nodesentinel dashboard setup
+docker compose up -d
+docker compose ps`} />
+      <p>Öffne anschließend <code>http://localhost:8888</code>. Verwende für den Zugriff aus dem Netzwerk einen HTTPS-Reverse-Proxy.</p>
+    </li>
+    <li>
+      <h3>Agent auf einem überwachten Host starten</h3>
+      <p>Lege im Agent-Verzeichnis eine geschützte <code>.env</code> an. Name und Schlüssel müssen exakt zum Dashboard-Eintrag passen.</p>
+      <CodeBlock title=".env" language="env" code={`NODESENTINEL_AGENT_NAME=HomeLab1
+NODESENTINEL_AGENT_KEY=DERSELBE_ZUFALLSSCHLUESSEL
+NODESENTINEL_HUB_URL=wss://dashboard.example.de`} />
+      <CodeBlock code={`chmod 600 .env
+docker compose -f compose.agent.yaml pull
+docker compose -f compose.agent.yaml up -d`} />
+    </li>
+  </ol>
+
+  <div class="callout warning">
+    <strong>Vor dem Netzwerkzugriff absichern</strong>
+    <p>Der Compose-Standard bindet das Dashboard nur an localhost. Nutze für einen entfernten Zugriff HTTPS und WebSocket-Unterstützung am Reverse Proxy. Übertrage Agent-Schlüssel niemals unverschlüsselt über ein Netzwerk.</p>
+  </div>
+
+  <h2>Installation prüfen</h2>
+  <ul class="check-list">
+    <li>Der Agent erscheint im Dashboard als online.</li>
+    <li>CPU- und Speichermetriken aktualisieren sich.</li>
+    <li>Ein Testalarm erreicht den gewünschten Kanal.</li>
+    <li>Die Dashboard- und Agent-Konfigurationsdateien sind nicht für andere Benutzer lesbar.</li>
+  </ul>
+</DocsLayout>

@@ -1,0 +1,77 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+---
+
+<DocsLayout title="Nativ & systemd" description="Dashboard und Agenten direkt unter Linux bauen und als gehärtete systemd-Dienste betreiben.">
+  <h2>Voraussetzungen</h2>
+  <p>Auf jedem Build-Host wird Go 1.24 oder neuer benötigt. Python ist für die aktuelle Go-Version nicht erforderlich.</p>
+  <CodeBlock code={`go version
+git clone https://github.com/TheArchitect998/NodeSentinel.git /opt/nodesentinel
+cd /opt/nodesentinel
+mkdir -p bin
+go build -o bin/nodesentinel ./cmd/nodesentinel`} />
+
+  <h2>Dashboard konfigurieren</h2>
+  <ol class="steps">
+    <li><h3>Beispieldateien kopieren</h3><CodeBlock code={`cp .env.example .env
+cp nodesentinel.config.example.json nodesentinel.config.json
+chmod 600 .env nodesentinel.config.json`} /></li>
+    <li><h3>Konfiguration ergänzen</h3><p>Trage Bind-Adresse, Port, State-Verzeichnis und die benannten Push-Agenten ein.</p><CodeBlock title=".env" language="env" code={`NODESENTINEL_DASHBOARD_HOST=127.0.0.1
+NODESENTINEL_DASHBOARD_PORT=8888
+NODESENTINEL_DASHBOARD_CONFIG=./nodesentinel.config.json
+NODESENTINEL_STATE_DIR=/opt/nodesentinel/state`} /></li>
+    <li>
+      <h3>State-Verzeichnis und Passwort setzen</h3>
+      <p>Führe den Setup-Befehl als derselbe unprivilegierte Benutzer aus, der später den Dashboard-Dienst betreibt.</p>
+      <CodeBlock code={`sudo install -d -o user -g user -m 0700 /opt/nodesentinel/state
+set -a
+source .env
+set +a
+./bin/nodesentinel dashboard setup`} />
+    </li>
+    <li><h3>Start testen</h3><CodeBlock code={`./bin/nodesentinel dashboard`} /><p>Rufe lokal <code>http://localhost:8888</code> auf und melde dich an.</p></li>
+  </ol>
+
+  <h2>Dashboard als systemd-Dienst</h2>
+  <CodeBlock code={`sudo cp systemd/nodesentinel.service.example \\
+  /etc/systemd/system/nodesentinel.service
+sudo nano /etc/systemd/system/nodesentinel.service`} />
+  <p>Prüfe insbesondere <code>User=</code>, <code>WorkingDirectory=</code> und den absoluten Pfad der geschützten <code>EnvironmentFile=</code>. Starte anschließend:</p>
+  <CodeBlock code={`sudo systemctl daemon-reload
+sudo systemctl enable --now nodesentinel.service
+sudo systemctl status nodesentinel.service`} />
+
+  <h2>Agent auf jedem Host</h2>
+  <ol>
+    <li>Baue dasselbe Binary.</li>
+    <li>Kopiere <code>nodesentinel-agent.env.example</code> nach <code>nodesentinel-agent.env</code>.</li>
+    <li>Trage Agentnamen, Schlüssel und die HTTPS-/WebSocket-Adresse des Dashboards ein.</li>
+    <li>Teste die Verbindung einmal im Vordergrund.</li>
+  </ol>
+  <CodeBlock title="nodesentinel-agent.env" language="env" code={`NODESENTINEL_AGENT_NAME=HomeLab1
+NODESENTINEL_AGENT_KEY=ein-starker-zufaelliger-schluessel
+NODESENTINEL_HUB_URL=wss://monitor.example.de`} />
+
+  <h3>Dienstkonto und Konfiguration schützen</h3>
+  <CodeBlock code={`sudo useradd --system --user-group --no-create-home \\
+  --shell /usr/sbin/nologin nodesentinel
+sudo install -o nodesentinel -g nodesentinel -m 0600 \\
+  nodesentinel-agent.env /etc/nodesentinel-agent.env
+sudo cp systemd/nodesentinel-agent.service.example \\
+  /etc/systemd/system/nodesentinel-agent.service`} />
+  <p>Prüfe Unit-Datei und Pfade, dann aktiviere den Agenten:</p>
+  <CodeBlock code={`sudo systemctl daemon-reload
+sudo systemctl enable --now nodesentinel-agent.service
+sudo journalctl -u nodesentinel-agent.service -f`} />
+
+  <h2>Optionale Systemquellen</h2>
+  <p>Docker, Journal, UFW, Fail2Ban und SMART bleiben opt-in. Nutze den bereitgestellten <code>sudoers</code>-Baustein nur nach Prüfung und passe Benutzer sowie tatsächliche Programmpfade an:</p>
+  <CodeBlock code={`sudo install -m 0440 systemd/nodesentinel.sudoers \\
+  /etc/sudoers.d/nodesentinel
+sudo visudo -cf /etc/sudoers.d/nodesentinel`} />
+  <div class="callout warning">
+    <strong>Härtung beibehalten</strong>
+    <p>Die mitgelieferte Unit setzt <code>NoNewPrivileges=yes</code>. Dadurch kann sudo nicht nachträglich Rechte erheben. Verwende für privilegierte Quellen einen eng begrenzten Helfer oder einen bewusst geprüften Service-Override.</p>
+  </div>
+</DocsLayout>

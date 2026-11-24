@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../data/site';
+---
+
+<BaseLayout title="Datenschutz – NodeSentinel" description="Datenschutzhinweis zur Verarbeitung personenbezogener Daten auf nodesentinel.de.">
+  <section class="legal-page">
+    <div class="shell legal-wrap prose">
+      <p class="eyebrow">Rechtliches</p>
+      <h1>Datenschutzerklärung</h1>
+      <p>Mit diesem Hinweis informiere ich darüber, welche personenbezogenen Daten beim Besuch von <strong>nodesentinel.de</strong> verarbeitet werden und welche Rechte du hast.</p>
+
+      <h2>1. Verantwortlicher</h2>
+      <p>
+        {site.legal.operator}<br />
+        {site.legal.address.map((line) => <>{line}<br /></>)}
+        E-Mail: <a href={`mailto:${site.legal.privacyEmail}`}>{site.legal.privacyEmail}</a><br />
+        Telefon: <a href="tel:+4915152291217">{site.legal.internationalPhone}</a>
+      </p>
+
+      <h2>2. Kein Tracking, keine Cookies</h2>
+      <p>Diese Website verwendet <strong>keine Cookies, kein Tracking und keine Analyse-Tools</strong>. Ich erhebe, speichere oder werte beim Besuch der Seite selbst keine personenbezogenen Profile aus. Eine Cookie-Einwilligung ist daher nicht erforderlich.</p>
+
+      <h2>3. Server-Logfiles</h2>
+      <p>Beim Aufruf der Website werden vom Hosting-Anbieter technisch bedingt Informationen in Server-Logfiles verarbeitet, insbesondere aufgerufene Seite, Datum und Uhrzeit, HTTP-Status, übertragene Datenmenge, Browserkennung, Referrer und IP-Adresse. Die IP-Adresse ist ein personenbezogenes Datum.</p>
+      <p>Ich habe auf diese Logfiles selbst keinen Zugriff und führe sie nicht mit anderen Datenquellen zusammen. Die Verarbeitung erfolgt zur Auslieferung der Website, zur Fehleranalyse sowie zur Abwehr und Untersuchung von Angriffen. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse am sicheren und stabilen Betrieb). Die Logfiles werden nach kurzer Zeit automatisch gelöscht.</p>
+
+      <h2>4. Hosting</h2>
+      <p>Diese Website wird statisch über <strong>GitHub Pages</strong> ausgeliefert. Hosting-Anbieter ist {site.legal.host}. Dabei kann es zu einer Übermittlung von Verbindungsdaten in die USA kommen. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (sicherer und effizienter Betrieb der Website). GitHub ist unter dem EU-US Data Privacy Framework zertifiziert. Die Übermittlung beschränkt sich auf die unter Ziffer 3 genannten technischen Verbindungsdaten.</p>
+
+      <h2>5. Domain und DNS</h2>
+      <p>Die Domain nodesentinel.de ist bei der {site.legal.domainRegistrar} registriert. Dort werden auch die DNS-Einträge geführt. Bei DNS-Anfragen werden die für die Namensauflösung erforderlichen technischen Daten verarbeitet. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO.</p>
+
+      <h2>6. SSL-/TLS-Verschlüsselung</h2>
+      <p>Diese Website nutzt aus Sicherheitsgründen eine SSL-/TLS-Verschlüsselung. Eine verschlüsselte Verbindung ist an <code>https://</code> in der Adresszeile des Browsers erkennbar.</p>
+
+      <h2>7. Externe Links</h2>
+      <p>Diese Website verlinkt auf externe Angebote, insbesondere auf GitHub. Beim Anklicken eines Links verlässt du diese Website; für die dortige Datenverarbeitung gilt die Datenschutzerklärung des jeweiligen Anbieters. Es werden keine Plugins oder eingebetteten Inhalte Dritter verwendet.</p>
+
+      <h2>8. Kontakt per E-Mail oder Telefon</h2>
+      <p>Wenn du mich per E-Mail oder Telefon kontaktierst, verarbeite ich deine Angaben zur Bearbeitung der Anfrage. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO, soweit die Anfrage einen Vertrag betrifft, und sonst Art. 6 Abs. 1 lit. f DSGVO.</p>
+      <p>E-Mails werden über mailbox.org der Heinlein Hosting GmbH, Schwedter Straße 8/9A, 10119 Berlin, Deutschland, empfangen und gespeichert. Der Anbieter arbeitet als Auftragsverarbeiter; die Server befinden sich in Deutschland. Die Daten werden nicht zu Werbezwecken weitergegeben und gelöscht, sobald der Zweck entfällt und keine gesetzlichen Aufbewahrungspflichten bestehen. Eine automatisierte Entscheidungsfindung einschließlich Profiling findet nicht statt.</p>
+
+      <h2>9. Deine Rechte</h2>
+      <p>Du hast das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung der Verarbeitung (Art. 18), Datenübertragbarkeit (Art. 20) sowie Widerspruch gegen Verarbeitungen auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO (Art. 21). Eine Einwilligung kannst du jederzeit mit Wirkung für die Zukunft widerrufen. Zur Ausübung genügt eine formlose Mitteilung an die oben genannte E-Mail-Adresse.</p>
+
+      <h2>10. Beschwerderecht</h2>
+      <p>Du hast das Recht, dich bei einer Datenschutzaufsichtsbehörde zu beschweren, insbesondere beim Hamburgischen Beauftragten für Datenschutz und Informationsfreiheit, Ludwig-Erhard-Straße 22, 20459 Hamburg, oder bei der Behörde an deinem Wohnort.</p>
+
+      <h2>11. Pflicht zur Bereitstellung</h2>
+      <p>Die technisch erforderlichen Verbindungsdaten müssen verarbeitet werden, damit die Website erreichbar ist. Eine darüber hinausgehende Bereitstellung deiner Daten ist weder gesetzlich noch vertraglich vorgeschrieben.</p>
+
+      <h2>12. Stand</h2>
+      <p>Stand: 24. November 2026. Diese Erklärung wird angepasst, wenn sich Website, eingesetzte Dienste oder rechtliche Vorgaben ändern.</p>
+    </div>
+  </section>
+</BaseLayout>

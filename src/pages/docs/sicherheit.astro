@@ -1,0 +1,58 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+---
+
+<DocsLayout title="Sicherheit" description="Vertrauliche Daten, Agent-Zugriffe und privilegierte Quellen gezielt schützen – ohne unnötige Rechte zu vergeben.">
+  <h2>Grundregeln</h2>
+  <ul class="check-list">
+    <li>Committe niemals <code>.env</code>-Dateien, Schlüssel oder Hostkonfigurationen.</li>
+    <li>Verwende mindestens zwölf Zeichen für das Dashboard-Passwort und einen eigenen starken Schlüssel pro Agent.</li>
+    <li>Nutze HTTPS und WebSocket über TLS für jeglichen Netzwerkzugriff.</li>
+    <li>Halte Dashboard-State und Konfigurationsdateien nur für den Dienstbenutzer lesbar.</li>
+    <li>Öffne Agent-Ports nicht unnötig. Push-Agenten benötigen keinen eingehenden Port.</li>
+    <li>Sichere das State-Verzeichnis verschlüsselt und teste die Wiederherstellung.</li>
+  </ul>
+
+  <h2>Verschlüsselte Agent-Kommunikation</h2>
+  <p>Push-Agenten melden sich mit Agentname und <code>X-Agent-Key</code> an. Sie prüfen das TLS-Zertifikat des Dashboards. <code>wss://</code> ist für entfernte Verbindungen zwingend; <code>ws://</code> wird nur für Loopback-Verbindungen angenommen.</p>
+  <p>Der Proxy zwischen Dashboard und Agent muss WebSocket-Upgrades unterstützen. Begrenze auch den internen Hop zwischen Proxy und Dashboard, denn dort werden Schlüssel und Daten weitergeleitet.</p>
+
+  <h2>Schlüssel rotation</h2>
+  <ol>
+    <li>Erzeuge einen neuen Zufallsschlüssel, zum Beispiel mit <code>openssl rand -base64 32</code>.</li>
+    <li>Hinterlege ihn in der passenden Agent-Konfiguration des Dashboards.</li>
+    <li>Starte das Dashboard kontrolliert neu.</li>
+    <li>Aktualisiere den Agenten und starte dessen Dienst neu.</li>
+    <li>Prüfe, dass keine Prozesse oder Logs den alten Schlüssel noch enthalten.</li>
+  </ol>
+
+  <h2>Agent-Berechtigungen</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Zugriff</th><th>Zweck</th><th>Standard</th></tr></thead>
+      <tbody>
+        <tr><td>Read-only /proc</td><td>CPU, RAM und Kernelmetriken</td><td>An</td></tr>
+        <tr><td>Read-only /</td><td>Host-Dateisystembelegung</td><td>Aus</td></tr>
+        <tr><td>Docker-Socket</td><td>Containerstatus, Metriken und Ereignisse</td><td>Aus, Root-äquivalent</td></tr>
+        <tr><td>Journal</td><td>SSH- und Fail2Ban-Ereignisse</td><td>Aus</td></tr>
+        <tr><td>NET_ADMIN und UFW</td><td>Firewallstatus</td><td>Aus</td></tr>
+        <tr><td>Fail2Ban-Socket</td><td>Fail2Ban-Status und Ereignisse</td><td>Aus</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Legacy-HTTP-Agenten</h2>
+  <p>Ältere Pull-Agenten bleiben kompatibel, sofern <code>NODESENTINEL_HUB_URL</code> nicht gesetzt ist. Jede Anfrage authentifiziert sich über <code>X-Agent-Key</code>. Aktiviere außerhalb von Loopback zwingend TLS mit Zertifikatsprüfung.</p>
+  <CodeBlock code={`openssl req -x509 -newkey rsa:4096 -nodes -days 825 \\
+  -keyout agent.key -out agent.crt \\
+  -subj "/CN=homelab1.lan" \\
+  -addext "subjectAltName=DNS:homelab1.lan,IP:192.168.1.20"
+chmod 600 agent.key`} />
+  <p>Verteile nur <code>agent.crt</code> an das Dashboard. Die Zertifikatsprüfung lässt sich absichtlich nicht deaktivieren.</p>
+
+  <div class="callout warning">
+    <strong>Vertrauensgrenzen</strong>
+    <p>Der Docker-Socket, Schreibzugriff auf Hostpfade, NET_ADMIN sowie Fail2Ban- oder UFW-Helfer verändern die Sicherheitsgrenze deutlich. Nur vertrauenswürdige Images ausführen und jede Quelle einzeln bewerten.</p>
+  </div>
+</DocsLayout>

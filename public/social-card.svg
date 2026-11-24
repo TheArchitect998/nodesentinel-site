@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs><radialGradient id="g"><stop stop-color="#123b27"/><stop offset="1" stop-color="#07110d"/></radialGradient></defs>
+  <rect width="1200" height="630" fill="url(#g)"/>
+  <path d="M120 380h100l60-180 90 260 70-230 60 150h150" fill="none" stroke="#83f5b1" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="600" y="210" fill="#eefcf3" font-family="Arial,sans-serif" font-size="96" font-weight="700">NodeSentinel</text>
+  <text x="600" y="280" fill="#9bb4a5" font-family="Arial,sans-serif" font-size="32">Dein Homelab. Ein klares Bild.</text>
+</svg>

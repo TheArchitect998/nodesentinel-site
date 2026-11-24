@@ -1,0 +1,102 @@
+---
+import { site } from '../data/site';
+import Icon from '../components/Icon.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  class?: string;
+}
+
+const { title, description, image = '/social-card.svg', class: className = '' } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#07110d" />
+    <link rel="canonical" href={canonicalURL} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={new URL(image, Astro.site)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <title>{title}</title>
+  </head>
+  <body class={className}>
+    <a class="skip-link" href="#inhalt">Zum Inhalt springen</a>
+    <header class="site-header">
+      <div class="shell header-inner">
+        <a class="brand" href="/" aria-label="NodeSentinel Startseite">
+          <span class="brand-mark"><span></span><span></span><span></span></span>
+          <span>Node<span>Sentinel</span></span>
+        </a>
+        <nav class="main-nav" aria-label="Hauptnavigation">
+          <a class:list={{ active: Astro.url.pathname.startsWith('/docs') }} href="/docs/">Dokumentation</a>
+          <a href={site.repository} target="_blank" rel="noreferrer">GitHub <Icon name="external" size={14} /></a>
+          <a class="button button--small" href="/docs/schnellstart/">Jetzt starten <Icon name="arrow" size={16} /></a>
+        </nav>
+        <button class="mobile-menu-button" type="button" aria-expanded="false" aria-controls="mobile-nav" aria-label="Menü öffnen">
+          <Icon name="menu" size={24} />
+        </button>
+      </div>
+      <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile Navigation" hidden>
+        <a href="/docs/">Dokumentation</a>
+        <a href="/docs/schnellstart/">Schnellstart</a>
+        <a href={site.repository}>GitHub</a>
+      </nav>
+    </header>
+
+    <main id="inhalt">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-grid">
+        <div>
+          <a class="brand" href="/"><span class="brand-mark"><span></span><span></span><span></span></span><span>Node<span>Sentinel</span></span></a>
+          <p>Selbst gehostetes Monitoring für Systeme, die dir wichtig sind.</p>
+        </div>
+        <div>
+          <h2>Dokumentation</h2>
+          <a href="/docs/schnellstart/">Schnellstart</a>
+          <a href="/docs/docker/">Docker Compose</a>
+          <a href="/docs/sicherheit/">Sicherheit</a>
+        </div>
+        <div>
+          <h2>Projekt</h2>
+          <a href={site.repository}>GitHub</a>
+          <a href={`${site.repository}/releases`}>Versionen</a>
+          <a href={`${site.repository}/issues`}>Problem melden</a>
+        </div>
+        <div>
+          <h2>Rechtliches</h2>
+          <a href="/impressum/">Impressum</a>
+          <a href="/datenschutz/">Datenschutz</a>
+        </div>
+      </div>
+      <div class="shell footer-bottom">
+        <span>© {new Date().getFullYear()} NodeSentinel. Open Source.</span>
+        <span>Release <strong>{site.version}</strong></span>
+      </div>
+    </footer>
+
+    <script>
+      const menuButton = document.querySelector<HTMLButtonElement>('.mobile-menu-button');
+      const mobileNav = document.querySelector<HTMLElement>('#mobile-nav');
+      menuButton?.addEventListener('click', () => {
+        const open = menuButton.getAttribute('aria-expanded') === 'true';
+        menuButton.setAttribute('aria-expanded', String(!open));
+        mobileNav?.toggleAttribute('hidden', open);
+      });
+    </script>
+  </body>
+</html>

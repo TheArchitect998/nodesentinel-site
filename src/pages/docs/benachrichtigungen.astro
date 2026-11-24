@@ -1,0 +1,55 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+---
+
+<DocsLayout title="Benachrichtigungen" description="Kanäle einrichten, Temperaturgrenzen wählen und Tagesberichte für deine Infrastruktur aktivieren.">
+  <h2>Verfügbare Kanäle</h2>
+  <p>Unter <strong>Benachrichtigungen</strong> können mehrere Anbieter parallel aktiviert werden. Nach jeder Änderung empfiehlt sich die integrierte Testnachricht.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Kanal</th><th>Benötigte Angaben</th></tr></thead>
+      <tbody>
+        <tr><td>Telegram</td><td>Bot-Token und Chat-ID</td></tr>
+        <tr><td>Discord</td><td>Webhook-URL</td></tr>
+        <tr><td>Ntfy</td><td>Server, Topic und gegebenenfalls Zugangsdaten</td></tr>
+        <tr><td>Pushover</td><td>Anwendungstoken und Benutzerkey</td></tr>
+        <tr><td>E-Mail</td><td>SMTP-Server, Port, TLS-Modus, Absender, Empfänger und optional Login</td></tr>
+        <tr><td>Webhook</td><td>URL und optional ein Bearer-Token</td></tr>
+        <tr><td>Gotify</td><td>Server-URL und Anwendungstoken</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Gespeicherte Geheimnisse werden nach dem Speichern nicht mehr im Klartext angezeigt. Wenn ein geheimes Feld beim Bearbeiten leer bleibt, wird der vorhandene Wert übernommen.</p>
+
+  <h2>Webhook-Payload</h2>
+  <CodeBlock title="POST body" language="json" code={`{
+  "source": "nodesentinel",
+  "message": "Die vollständige Meldung",
+  "text": "Kompatible Kurzform"
+}`} />
+  <p>Wurde ein Token hinterlegt, wird es als <code>Authorization: Bearer &lt;token&gt;</code> gesendet.</p>
+
+  <h2>Temperaturwarnungen</h2>
+  <ol>
+    <li>Aktiviere mindestens einen Benachrichtigungskanal.</li>
+    <li>Lege je Host einen Grenzwert fest.</li>
+    <li>Aktiviere Temperaturwarnungen unter <strong>Temperatur und Tagesbericht</strong>.</li>
+  </ol>
+  <p>Bei Überschreitung wird alle fünf Minuten wieder gewarnt. Sinkt die Temperatur wieder unter den Grenzwert, folgt eine Entwarnung.</p>
+
+  <h2>Hardwarewarnungen</h2>
+  <p>Hardwarewarnungen sind optional. Sie benötigen S.M.A.R.T.-Daten und/oder ZFS-Status vom Agenten. Geprüft werden unter anderem fehlerhafte Integritätstests, neue oder nicht korrigierbare Sektoren, NVMe-Warnungen und ZFS-Pools, die nicht <code>ONLINE</code> sind.</p>
+  <p>Eine Meldung wird gesendet, wenn sich die Liste der Probleme ändert, und erneut, wenn alle Probleme verschwinden. Unveränderte Probleme erzeugen keine wiederholten Meldungen.</p>
+
+  <h2>Tagesbericht</h2>
+  <p>Wähle eine Uhrzeit in der Zeitzone des Dashboard-Prozesses. Nach diesem Zeitpunkt erzeugt NodeSentinel pro Host und Kanal einen Bericht über die zurückliegenden 24 Stunden. Fehlende Temperatur- oder Ereignisabdeckung wird kenntlich gemacht. Bei Zustellfehlern versucht das Dashboard später am selben Tag erneut zu senden; eine Mehrfachzustellung ist dabei grundsätzlich möglich.</p>
+
+  <h2>Ereignisdaten</h2>
+  <ul>
+    <li><strong>SSH und Fail2Ban:</strong> benötigen lesbare Journaldateien.</li>
+    <li><strong>Docker:</strong> benötigt den ausdrücklich aktivierten Docker-Socket-Zugriff.</li>
+    <li><strong>Wiederholung:</strong> Ereigniscursor bleiben über Neustarts erhalten.</li>
+    <li><strong>Begrenzung:</strong> Bereits veraltete oder vom Quellsystem verworfene Ereignisse können nicht rekonstruiert werden.</li>
+  </ul>
+</DocsLayout>

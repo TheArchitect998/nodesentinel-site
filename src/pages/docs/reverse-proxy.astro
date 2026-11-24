@@ -1,0 +1,60 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+---
+
+<DocsLayout title="HTTPS & Reverse Proxy" description="Das Dashboard mit TLS veröffentlichen, WebSocket-Upgrades weiterleiten und sichere Cookies hinter einem vertrauenswürdigen Proxy aktivieren.">
+  <h2>Empfohlene Topologie</h2>
+  <p>Betreibe NodeSentinel lokal auf <code>127.0.0.1:8888</code>. Ein Reverse Proxy beendet HTTPS und leitet Browser- und WebSocket-Verkehr weiter. Beschränke den direkten Zugriff auf den Dashboard-Port per Firewall.</p>
+  <div class="callout warning">
+    <strong>Kein offenes HTTP</strong>
+    <p>Unverschlüsseltes HTTP legt Anmeldedaten, Sitzungscookies, Agent-Schlüssel und Messdaten offen. Auch reine LAN-Umgebungen sollten HTTPS verwenden.</p>
+  </div>
+
+  <h2>Caddy</h2>
+  <CodeBlock title="Caddyfile" language="caddy" code={`monitor.example.de {
+    reverse_proxy 127.0.0.1:8888
+}`} />
+  <p>Caddy unterstützt WebSocket-Upgrades automatisch und kann öffentliche TLS-Zertifikate verwalten.</p>
+
+  <h2>nginx</h2>
+  <CodeBlock title="/etc/nginx/sites-available/nodesentinel" language="nginx" code={`server {
+    listen 443 ssl;
+    server_name monitor.example.de;
+
+    ssl_certificate     /etc/ssl/monitor.example.de.crt;
+    ssl_certificate_key /etc/ssl/monitor.example.de.key;
+
+    location /api/agent/connect {
+        proxy_pass http://127.0.0.1:8888;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location / {
+        proxy_pass http://127.0.0.1:8888;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}`} />
+
+  <h2>Traefik</h2>
+  <p>Leite die Domain über einen TLS-Router an <code>http://127.0.0.1:8888</code> weiter. Traefik setzt die Forwarded-Protokollheader und unterstützt WebSocket-Verkehr.</p>
+
+  <h2>Vertrauenswürdige Proxys</h2>
+  <p>Wenn das Dashboard sicher erkennen soll, dass die ursprüngliche Verbindung HTTPS verwendet, muss die Quell-IP oder das Quellnetz des Proxys explizit vertrauenswürdig sein. Dadurch werden Sitzungs-Cookies korrekt als <code>Secure</code> markiert.</p>
+  <CodeBlock title=".env" language="env" code={`NODESENTINEL_TRUSTED_PROXIES=127.0.0.1,172.18.0.0/16`} />
+  <p>Forwarded-Header von allen nicht vertrauenswürdigen Quellen werden verworfen. Vertrauensangaben wie <code>0.0.0.0/0</code> solltest du nicht verwenden.</p>
+
+  <h2>Agent-Adresse</h2>
+  <p>Der Push-Agent erhält ausschließlich die externe verschlüsselte WebSocket-Adresse. Achte darauf, dass die Domain vom Agenten aufgelöst und Port 443 erreicht werden kann.</p>
+  <CodeBlock code={`curl -I https://monitor.example.de
+openssl s_client -connect monitor.example.de:443 -servername monitor.example.de`} />
+
+  <h2>Private Zertifizierungsstellen</h2>
+  <p>Bei eigenen Zertifizierungsstellen mountest du in den Agenten nur das öffentliche CA-Zertifikat. Hinterlege den Pfad über <code>NODESENTINEL_HUB_CA_CERT</code>. Der private Schlüssel des Dashboards oder Proxys darf niemals auf einen Agent-Host gelangen.</p>
+</DocsLayout>

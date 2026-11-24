@@ -1,0 +1,50 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+---
+
+<DocsLayout title="Aktualisierung" description="Dashboard und Agenten kontrolliert aktualisieren, Konfiguration migrieren und vorhandene Historie behalten.">
+  <h2>Vor jedem Update</h2>
+  <ol>
+    <li>Überprüfe die Release-Hinweise auf GitHub.</li>
+    <li>Sichere das Dashboard-State-Verzeichnis einschließlich <code>settings.json</code> und beider SQLite-Datenbanken.</li>
+    <li>Bei Docker prüfe Projektname und das verwendete <code>dashboard-state</code>-Volume.</li>
+    <li>Aktualisiere zuerst einen repräsentativen Agenten oder teste in einer Staging-Instanz.</li>
+  </ol>
+
+  <h2>Docker Compose</h2>
+  <CodeBlock code={`git pull --ff-only
+docker compose pull
+docker compose up -d
+docker compose ps
+
+docker compose -f compose.agent.yaml pull
+docker compose -f compose.agent.yaml up -d`} />
+  <p>Nutze für produktive Deployments bevorzugt einen festen Release-Tag. Behältst du den bisherigen Compose-Projektnamen, wird die bestehende Historie und das Passwort weiterverwendet.</p>
+
+  <h2>Native Installation</h2>
+  <CodeBlock code={`cd /opt/nodesentinel
+git pull --ff-only
+go build -o bin/nodesentinel ./cmd/nodesentinel
+sudo systemctl restart nodesentinel.service
+sudo systemctl restart nodesentinel-agent.service`} />
+  <p>Ein UI-only-Update kann durch Ersetzen einer kompatiblen <code>frontend/index.html</code> erfolgen. Sichere die vorherige Datei; das Dashboard liest die HTML-Datei pro Seitenaufruf neu ein.</p>
+
+  <h2>Nachkontrolle</h2>
+  <ul class="check-list">
+    <li>Dashboard-Anmeldung funktioniert.</li>
+    <li>Push-Agenten verbinden sich und senden aktuelle Werte.</li>
+    <li>Bestehende 30-Tage-Historie bleibt sichtbar.</li>
+    <li>Benachrichtigungstest wird zugestellt.</li>
+    <li>Optional aktive Docker-, Journal-, UFW- und Fail2Ban-Quellen bleiben verfügbar.</li>
+  </ul>
+
+  <h2>Migration älterer Versionen</h2>
+  <ul>
+    <li><code>NODESENTINEL_*</code>-Variablen sind bevorzugt; ältere <code>HOMELAB_*</code>-Namen funktionieren als Fallback.</li>
+    <li>Übernimm ältere Python-Konfiguration in <code>nodesentinel.config.json</code>. Python wird nicht mehr benötigt.</li>
+    <li>Bei Umbenennung eines Compose-Projekts muss <code>COMPOSE_PROJECT_NAME</code> auf den vorherigen Namen gesetzt werden, um das bestehende Volume zu behalten.</li>
+    <li>Wegen des umbenannten Session-Cookies ist nach einer Migration eine erneute Anmeldung nötig.</li>
+    <li>Für Push-Konfiguration wird ein benannter Agent mit Modus <code>push</code> angelegt und der Agent auf die passende <code>wss://</code>-Adresse umgestellt.</li>
+  </ul>
+</DocsLayout>

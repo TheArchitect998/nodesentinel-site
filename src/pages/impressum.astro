@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../data/site';
+---
+
+<BaseLayout title="Impressum – NodeSentinel" description="Impressum und Anbieterkennzeichnung der NodeSentinel-Dokumentationswebsite.">
+  <section class="legal-page">
+    <div class="shell legal-wrap prose">
+      <p class="eyebrow">Rechtliches</p>
+      <h1>Impressum</h1>
+
+      <h2>Angaben gemäß § 5 DDG</h2>
+      <p>
+        {site.legal.operator}<br />
+        {site.legal.address.map((line) => <>{line}<br /></>)}
+      </p>
+
+      <h2>Kontakt</h2>
+      <p>
+        E-Mail: <a href={`mailto:${site.legal.email}`}>{site.legal.email}</a><br />
+        Telefon: <a href="tel:+4915152291217">{site.legal.internationalPhone}</a>
+      </p>
+
+      <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
+      <p>{site.legal.operator}, Anschrift wie oben.</p>
+
+      <h2>Haftung für Inhalte</h2>
+      <p>Als Diensteanbieter bin ich für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 DDG bin ich jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen. Bei Bekanntwerden von Rechtsverletzungen entferne ich entsprechende Inhalte umgehend.</p>
+
+      <h2>Haftung für Links</h2>
+      <p>Diese Website enthält Links zu externen Websites Dritter, auf deren Inhalte ich keinen Einfluss habe. Für diese fremden Inhalte kann keine Gewähr übernommen werden; verantwortlich ist stets der jeweilige Anbieter. Bei Bekanntwerden von Rechtsverletzungen entferne ich solche Links umgehend.</p>
+
+      <h2>Urheberrecht</h2>
+      <p>Die durch den Seitenbetreiber erstellten Inhalte und Werke unterliegen dem deutschen Urheberrecht. Beiträge Dritter sind als solche gekennzeichnet. NodeSentinel selbst ist ein Open-Source-Projekt; für Quellcode und Beiträge gelten die jeweiligen Lizenz- und Hinweisbedingungen des Projekts.</p>
+
+      <h2>Verbraucherstreitbeilegung</h2>
+      <p>Ich bin weder bereit noch verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+    </div>
+  </section>
+</BaseLayout>

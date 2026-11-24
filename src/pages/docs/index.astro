@@ -1,0 +1,42 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+---
+
+<DocsLayout title="Dokumentation" description="Alles für Installation, sicheren Betrieb und Konfiguration von NodeSentinel – vom ersten Container bis zu detaillierten Alarmen.">
+  <p class="lead">NodeSentinel ist ein selbst gehostetes Monitoring-Dashboard für Linux-Systeme. Es sammelt Systemmetriken, Docker- und Sicherheitsinformationen und kann bei Auffälligkeiten über mehrere Kanäle benachrichtigen.</p>
+
+  <div class="callout">
+    <strong>Lokale Kontrolle</strong>
+    <p>Der Dashboard-Server und deine Historie laufen in deiner Infrastruktur. NodeSentinel benötigt für den normalen Betrieb keine SaaS-Plattform und sendet keine Telemetrie an den Hersteller.</p>
+  </div>
+
+  <h2>Wie NodeSentinel zusammenspielt</h2>
+  <p>Das zentrale Dashboard läuft auf einem Linux-Host. Auf jedem überwachten System läuft ein schlanker Agent. Neue Installationen verwenden den Push-Modus: Der Agent baut eine authentifizierte WebSocket-Verbindung zum Dashboard auf und sendet Messwerte nach außen. Für bestehende Installationen bleibt auch der HTTP-Pull-Modus verfügbar.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Baustein</th><th>Aufgabe</th><th>Empfohlener Port</th></tr></thead>
+      <tbody>
+        <tr><td>Dashboard</td><td>Weboberfläche, Speicherung, Erreichbarkeitsprüfungen und Alarme</td><td>8888, lokal gebunden</td></tr>
+        <tr><td>Push-Agent</td><td>Sammelt Hostmetriken und Ereignisse und verbindet sich zum Dashboard</td><td>Kein eingehender Port</td></tr>
+        <tr><td>Reverse Proxy</td><td>HTTPS-Zertifikat und optionaler öffentlicher Zugang</td><td>443</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Passende Installationsart wählen</h2>
+  <div class="doc-cards">
+    <a class="doc-card" href="/docs/docker/"><strong>Docker Compose</strong><span>Schnellster Einstieg mit fertigen AMD64- und ARM64-Images.</span></a>
+    <a class="doc-card" href="/docs/nativ/"><strong>Nativ & systemd</strong><span>Go-Binary und Systemdienste direkt auf dem Linux-Host.</span></a>
+    <a class="doc-card" href="/docs/reverse-proxy/"><strong>HTTPS & Proxy</strong><span>Caddy, nginx oder Traefik für geschützten Netzwerkzugriff.</span></a>
+    <a class="doc-card" href="/docs/konfiguration/"><strong>Konfiguration</strong><span>Agenten, Prüfungen, Verlauf und optionale Integrationen.</span></a>
+  </div>
+
+  <h2>Systemanforderungen</h2>
+  <ul class="check-list">
+    <li><strong>Docker:</strong> Docker Engine und das Compose-Plugin. Eine lokale Go-Installation ist nicht nötig.</li>
+    <li><strong>Nativ:</strong> Linux und Go 1.24 oder neuer zum Erstellen des Binaries.</li>
+    <li><strong>Architekturen:</strong> Linux AMD64 und ARM64 werden unterstützt.</li>
+    <li><strong>Optional:</strong> UFW, Fail2Ban, Docker und SMART werden nur gelesen, wenn sie ausdrücklich aktiviert wurden.</li>
+  </ul>
+</DocsLayout>

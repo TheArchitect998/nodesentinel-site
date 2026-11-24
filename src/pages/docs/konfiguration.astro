@@ -1,0 +1,63 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+---
+
+<DocsLayout title="Konfiguration" description="Agenten verwalten, Metriken verstehen, Erreichbarkeit prüfen und den Datenverlauf kontrollieren.">
+  <h2>Agenten hinzufügen oder entfernen</h2>
+  <p>Die Dashboard-Konfiguration enthält benannte Agenten. Im Push-Modus benötigt jeder Agent einen eigenen Namen und Schlüssel.</p>
+  <CodeBlock title="nodesentinel.config.json" language="json" code={`{
+  "agents": {
+    "HomeLab1": {
+      "mode": "push",
+      "key": "zufallsschluessel-fuer-homelab1"
+    },
+    "Legacy-NAS": {
+      "url": "https://nas.example.de:9100",
+      "key": "gespeicherter-legacy-schluessel",
+      "ca_cert": "/opt/nodesentinel/certs/nas.crt"
+    }
+  }
+}`} />
+  <p>Nach Änderungen wird das Dashboard neu gestartet. Entfernst du einen Eintrag, kann sich dieser Agent nicht mehr authentifizieren.</p>
+  <CodeBlock code={`sudo systemctl restart nodesentinel.service
+# oder mit Compose:
+docker compose restart dashboard`} />
+
+  <h2>Systemmetriken und Historie</h2>
+  <p>Ressourcen werden einmal pro Minute gespeichert und 30 Tage aufbewahrt. Der Browser aktualisiert die Ansicht alle 15 Sekunden. Neben CPU, Arbeitsspeicher und Dateisystem zeigt NodeSentinel verfügbare Daten aus folgenden Bereichen:</p>
+  <ul>
+    <li>Temperaturen, Swap und Laufwerks-E/A</li>
+    <li>Verkehrsraten je Netzwerkschnittstelle</li>
+    <li>NVIDIA-GPU über <code>nvidia-smi</code></li>
+    <li>ZFS-Pools über <code>zpool</code></li>
+    <li>Batteriestatus und S.M.A.R.T.-Gesundheit, wenn verfügbar</li>
+  </ul>
+  <p>Loopback- sowie typische virtuelle Docker-Schnittstellen werden bei den Netzwerkraten ignoriert. Bei Container-Agenten beschreiben Netzwerkwerte standardmäßig den Container-Namespace.</p>
+
+  <h2>Docker-Metriken</h2>
+  <p>Nach expliziter Docker-Freigabe liest NodeSentinel Status, Startzeiten, Neustarts, CPU, Speicher und Netzwerk pro Container. Die Netzwerkwerte basieren auf Docker-Zählern und sind bei sehr geringem Verkehrsaufkommen nur näherungsweise.</p>
+
+  <h2>Erreichbarkeitsprüfungen</h2>
+  <p>Prüfungen laufen einmal pro Minute direkt im Dashboard-Worker. Nach zwei fehlgeschlagenen Durchläufen gilt ein Ziel als nicht erreichbar.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Typ</th><th>Ziel</th><th>Erfolgskriterium</th></tr></thead>
+      <tbody>
+        <tr><td>HTTP</td><td>URL</td><td>Status unter 400; Zertifikate werden geprüft</td></tr>
+        <tr><td>TCP</td><td>Host und Port</td><td>TCP-Verbindung wird aufgebaut</td></tr>
+        <tr><td>Ping</td><td>Host oder IP</td><td>ICMP-Antwort</td></tr>
+        <tr><td>DNS</td><td>Hostname</td><td>Name kann aufgelöst werden</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Ausfälle werden nicht als Langzeithistorie gespeichert. Alarm und Wiederherstellung werden an die ausgewählten Kanäle gesendet.</p>
+
+  <h2>Daten und Backups</h2>
+  <p>Einstellungen, Anmeldeinformationen und SQLite-Datenbanken liegen im Dashboard-State-Verzeichnis. Schütze und sichere dieses Verzeichnis oder das entsprechende Docker-Volume. Betreibe genau einen Dashboard-Worker, damit Schreibvorgänge nicht konkurrieren.</p>
+  <ul class="check-list">
+    <li><strong>Ressourcenhistorie:</strong> 30 Tage</li>
+    <li><strong>Temperatur- und Ereignisdaten für Berichte:</strong> ungefähr 25 Stunden</li>
+    <li><strong>Offline-Zeiten:</strong> Nicht erfasste Agent-Messwerte werden beim Wiederverbinden nicht nachträglich erzeugt.</li>
+  </ul>
+</DocsLayout>

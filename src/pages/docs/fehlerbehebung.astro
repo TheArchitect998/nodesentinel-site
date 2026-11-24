@@ -1,0 +1,57 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import CodeBlock from '../../components/CodeBlock.astro';
+---
+
+<DocsLayout title="Fehlerbehebung" description="Typische Verbindungs-, Berechtigungs- und Proxyfehler systematisch eingrenzen und beheben.">
+  <h2>Alle Agenten sind offline</h2>
+  <ol>
+    <li>Prüfe den Agent-Prozess oder Container.</li>
+    <li>Vergleiche Agentname und Schlüssel mit dem Dashboard-Eintrag.</li>
+    <li>Kontrolliere DNS, TLS-Zertifikat und Erreichbarkeit der <code>wss://</code>-Adresse.</li>
+    <li>Prüfe am Reverse Proxy, ob WebSocket-Upgrades zugelassen sind.</li>
+  </ol>
+  <CodeBlock code={`sudo systemctl status nodesentinel-agent.service
+sudo journalctl -u nodesentinel-agent.service -n 100 --no-pager
+curl -I https://monitor.example.de`} />
+
+  <h2>Dashboard- oder Agent-Logs</h2>
+  <CodeBlock code={`sudo journalctl -u nodesentinel.service -n 100 -f
+sudo journalctl -u nodesentinel-agent.service -n 100 -f
+
+# Docker Compose
+docker compose logs --tail=100 -f dashboard
+docker compose -f compose.agent.yaml logs --tail=100 -f agent`} />
+
+  <h2>UFW oder Fail2Ban fehlt</h2>
+  <p>Prüfe auf dem Agent-Host sowohl Werkzeug als auch Rechte:</p>
+  <CodeBlock code={`sudo -n ufw status
+sudo -n fail2ban-client status`} />
+  <p>Das passende Enable-Flag und die nötigen Mounts oder sudo-Regeln müssen gesetzt sein. Die gehärtete systemd-Unit blockiert bewusste Privilegienerweiterung per sudo; entferne <code>NoNewPrivileges</code> nicht ohne Sicherheitsbewertung.</p>
+
+  <h2>Docker-Container fehlen</h2>
+  <CodeBlock code={`docker ps -a
+docker inspect nodesentinel-agent`} />
+  <p>Setze <code>NODESENTINEL_ENABLE_DOCKER=1</code> und mounte den Docker-Socket nur, wenn die Root-äquivalente Vertrauensgrenze akzeptabel ist. Starte den Agent-Container nach Änderungen neu.</p>
+
+  <h2>HTTPS wird im Browser nicht gefunden</h2>
+  <ol>
+    <li>Teste die DNS-Auflösung vom Client aus.</li>
+    <li>Prüfe, ob die Domain auf den Proxy, nicht auf den internen Dashboard-Port, zeigt.</li>
+    <li>Teste Port 443 vom Client und Port 8888 direkt vom Proxy-Host.</li>
+    <li>Verwende im Proxy HTTP als Backend-Schema, sofern das Dashboard intern unverschlüsselt läuft.</li>
+    <li>Aktiviere am Proxy die WebSocket-Unterstützung.</li>
+  </ol>
+  <CodeBlock code={`nslookup monitor.example.de
+curl -v https://monitor.example.de
+curl http://DASHBOARD-IP:8888/`} />
+
+  <h2>Port bereits belegt</h2>
+  <CodeBlock code={`sudo lsof -i :8888
+# alternativ
+sudo ss -ltnp | grep 8888`} />
+  <p>Beende den konkurrierenden Prozess kontrolliert oder ändere die Portzuordnung in Dashboard-Umgebung und Proxy. Beende keinen unbekannten Prozess blind mit erzwungenem Kill.</p>
+
+  <h2>Historie stoppt nach Trennung</h2>
+  <p>NodeSentinel puffert Agent-Messwerte nicht über eine Offline-Phase hinweg. Nach Wiederverbindung beginnt die Historie wieder an der aktuellen Probe. Prüfe Netzwerkausfall, Proxy-Timeouts, Systemzeit und Agent-Neustarts. Ereignisabdeckung ist zusätzlich durch die Aufbewahrungsdauer des Quellsystems begrenzt.</p>
+</DocsLayout>
