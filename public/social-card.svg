@@ -1,7 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <defs><radialGradient id="g"><stop stop-color="#123b27"/><stop offset="1" stop-color="#07110d"/></radialGradient></defs>
   <rect width="1200" height="630" fill="url(#g)"/>
-  <path d="M120 380h100l60-180 90 260 70-230 60 150h150" fill="none" stroke="#83f5b1" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="600" y="210" fill="#eefcf3" font-family="Arial,sans-serif" font-size="96" font-weight="700">NodeSentinel</text>
-  <text x="600" y="280" fill="#9bb4a5" font-family="Arial,sans-serif" font-size="32">Dein Homelab. Ein klares Bild.</text>
+  <g transform="translate(110 120) scale(2.55)">
+    <path fill="#1eecc5" d="M15 17 64 45 39 51 24 37 8 27l7-10Zm98 0L64 45l25 6 15-14 16-10-7-10Z"/>
+    <path fill="none" stroke="#1eecc5" stroke-width="7" d="M21 49v16c0 24 18 42 43 51 25-9 43-27 43-51V49M27 78l27 17m47-17L74 95"/>
+    <path fill="none" stroke="#1eecc5" stroke-width="7" d="M43 58c-10 3-14 12-10 21 4 8 15 11 23 4 5-4 8-12 4-17m25-8c10 3 14 12 10 21-4 8-15 11-23 4-5-4-8-12-4-17"/>
+    <path fill="#07110d" stroke="#1eecc5" stroke-width="4" d="M57 64c-6 8-4 18 3 22 3 2 6 2 8 0 7-4 9-14 3-22-4-5-10-5-14 0Z"/>
+    <path fill="#ff8b32" d="m64 75 9 16-9 8-9-8 9-16Z"/>
+    <path fill="none" stroke="#1eecc5" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" d="M9 110h40l15-14 9 18 8-8h38"/>
+  </g>
+  <text x="590" y="265" fill="#eefcf3" font-family="Arial,sans-serif" font-size="88" font-weight="700">Node<tspan fill="#1eecc5">Sentinel</tspan></text>
+  <text x="595" y="325" fill="#9bb4a5" font-family="Arial,sans-serif" font-size="30">Dein Homelab. Ein klares Bild.</text>
 </svg>
