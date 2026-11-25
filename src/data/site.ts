@@ -2,7 +2,7 @@ export const site = {
   name: 'NodeSentinel',
   domain: 'https://nodesentinel.de',
   repository: 'https://github.com/TheArchitect998/NodeSentinel',
-  version: 'v2.4.2',
+  version: 'v2.4.3',
   legal: {
     operator: 'Pius Savary',
     address: [
