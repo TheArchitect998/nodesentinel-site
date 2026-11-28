@@ -1,0 +1,87 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+---
+
+<BaseLayout lang="en" title="Roadmap – NodeSentinel" description="Planned NodeSentinel features: more stable live updates, improved history, backups, and native desktop and mobile clients.">
+  <section class="roadmap-hero">
+    <div class="shell">
+      <p class="eyebrow">What's next</p>
+      <h1>NodeSentinel grows with your homelab.</h1>
+      <p>This roadmap reflects the current development direction. Priorities and scope may change based on user feedback, security requirements, and technical findings.</p>
+      <div class="roadmap-legend" aria-label="Roadmap status legend">
+        <span><i class="status-current"></i>In progress</span>
+        <span><i class="status-planned"></i>Planned</span>
+        <span><i class="status-outlook"></i>Long-term</span>
+        <span><i class="status-blocked"></i>Currently blocked</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section roadmap-section">
+    <div class="shell">
+      <div class="roadmap-group">
+        <div class="roadmap-group-heading">
+          <span class="roadmap-number">01</span>
+          <div><p class="eyebrow">First</p><h2>Stability and better usability</h2><p>Everyday use should remain calm, fast, and easy to navigate.</p></div>
+        </div>
+        <div class="roadmap-grid">
+          <article class="roadmap-card"><span class="roadmap-status status-planned">Planned</span><h3>Stable live updates</h3><p>New measurements should load without flickering. Scroll position, expanded sections, focus, and selections must remain intact.</p></article>
+          <article class="roadmap-card"><span class="roadmap-status status-planned">Planned</span><h3>More detailed history</h3><p>Finer time ranges, multiple temperature sensors, exact hover values, and clearly separated system and container views.</p></article>
+          <article class="roadmap-card"><span class="roadmap-status status-planned">Planned</span><h3>A clearer overview</h3><p>Larger responsive cards, persistent card selection, and selective downloads of statistics.</p></article>
+          <article class="roadmap-card"><span class="roadmap-status status-planned">Planned</span><h3>React + TypeScript</h3><p>A gradual frontend migration so complex views can remain component-based, type-safe, and maintainable over time.</p></article>
+        </div>
+      </div>
+
+      <div class="roadmap-group">
+        <div class="roadmap-group-heading">
+          <span class="roadmap-number">02</span>
+          <div><p class="eyebrow">Next</p><h2>More data and reliable operation</h2><p>Additional sources, longer retention, and safe recovery.</p></div>
+        </div>
+        <div class="roadmap-grid">
+          <article class="roadmap-card"><span class="roadmap-status status-planned">Planned</span><h3>Non-Docker applications</h3><p>Monitor selected native services and applications such as Duplicati or Nextcloud, including process state and CPU and memory history.</p></article>
+          <article class="roadmap-card"><span class="roadmap-status status-planned">Planned</span><h3>Configurable retention</h3><p>Longer storage for events and reports with individually configurable retention periods.</p></article>
+          <article class="roadmap-card"><span class="roadmap-status status-planned">Planned</span><h3>Backups and recovery</h3><p>Automatic backups of settings and history with a documented and tested recovery process.</p></article>
+          <article class="roadmap-card"><span class="roadmap-status status-current">In progress</span><h3>Installation and releases</h3><p>Prebuilt images are already available. Next come required CI checks, changelogs, and a consistent release process.</p></article>
+        </div>
+      </div>
+
+      <div class="roadmap-group">
+        <div class="roadmap-group-heading">
+          <span class="roadmap-number">03</span>
+          <div><p class="eyebrow">New clients</p><h2>Take NodeSentinel with you</h2><p>The web interface will remain available. Native apps will complement it as a secure alternative.</p></div>
+        </div>
+        <div class="roadmap-grid roadmap-grid--wide">
+          <article class="roadmap-card roadmap-card--wide">
+            <span class="roadmap-status status-planned">Planned</span>
+            <h3>Windows, Linux, and Android apps</h3>
+            <p>Planned clients include a Microsoft Store app, a Linux desktop app starting with Flathub, and an Android app for Google Play.</p>
+            <ul class="roadmap-list">
+              <li><Icon name="check" size={15} />Individual, revocable app tokens</li>
+              <li><Icon name="check" size={15} />Shared, versioned client API</li>
+              <li><Icon name="check" size={15} />Secure local credential storage</li>
+              <li><Icon name="check" size={15} />Hosts, history, alerts, and availability checks on the go</li>
+            </ul>
+          </article>
+          <article class="roadmap-card"><span class="roadmap-status status-blocked">Blocked</span><h3>iOS app</h3><p>The client API is being designed to keep a future iOS app possible. Implementation and publication are currently blocked by the lack of suitable Apple hardware and publication budget.</p></article>
+        </div>
+      </div>
+
+      <div class="roadmap-group">
+        <div class="roadmap-group-heading">
+          <span class="roadmap-number">04</span>
+          <div><p class="eyebrow">Long-term</p><h2>Collaboration and secure sign-in</h2></div>
+        </div>
+        <div class="roadmap-grid">
+          <article class="roadmap-card"><span class="roadmap-status status-outlook">Long-term</span><h3>Multiple users</h3><p>Separate accounts and roles for households, teams, or shared infrastructure.</p></article>
+          <article class="roadmap-card"><span class="roadmap-status status-outlook">Long-term</span><h3>OAuth and OIDC</h3><p>Sign in through existing identity providers such as Authentik or Authelia without removing local sign-in.</p></article>
+        </div>
+      </div>
+
+      <div class="roadmap-note">
+        <div><p class="eyebrow">Shape the roadmap</p><h2>Which feature do you need first?</h2><p>Bug reports, concrete use cases, and explained priorities help guide development.</p></div>
+        <a class="button" href="https://github.com/TheArchitect998/NodeSentinel/issues" target="_blank" rel="noreferrer">Open a GitHub issue <Icon name="external" size={17} /></a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

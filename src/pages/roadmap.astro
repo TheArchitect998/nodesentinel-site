@@ -1,0 +1,87 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+---
+
+<BaseLayout title="Roadmap – NodeSentinel" description="Geplante Funktionen und Entwicklungsrichtungen von NodeSentinel: stabilere Live-Ansichten, bessere Verläufe, Backups und native Desktop- und Mobilclients.">
+  <section class="roadmap-hero">
+    <div class="shell">
+      <p class="eyebrow">Die nächsten Schritte</p>
+      <h1>NodeSentinel wächst mit deinem Homelab.</h1>
+      <p>Diese Roadmap zeigt die aktuelle Entwicklungsrichtung. Reihenfolge und Umfang können sich mit Nutzerfeedback, Sicherheitsanforderungen und technischen Erkenntnissen ändern.</p>
+      <div class="roadmap-legend" aria-label="Bedeutung der Statusangaben">
+        <span><i class="status-current"></i>In Arbeit</span>
+        <span><i class="status-planned"></i>Geplant</span>
+        <span><i class="status-outlook"></i>Ausblick</span>
+        <span><i class="status-blocked"></i>Aktuell blockiert</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section roadmap-section">
+    <div class="shell">
+      <div class="roadmap-group">
+        <div class="roadmap-group-heading">
+          <span class="roadmap-number">01</span>
+          <div><p class="eyebrow">Zuerst</p><h2>Stabilität und bessere Bedienung</h2><p>Die tägliche Nutzung soll ruhig, schnell und übersichtlich bleiben.</p></div>
+        </div>
+        <div class="roadmap-grid">
+          <article class="roadmap-card"><span class="roadmap-status status-planned">Geplant</span><h3>Stabile Live-Aktualisierung</h3><p>Neue Messwerte sollen ohne Flackern geladen werden. Scrollposition, geöffnete Bereiche, Fokus und Auswahl bleiben erhalten.</p></article>
+          <article class="roadmap-card"><span class="roadmap-status status-planned">Geplant</span><h3>Präzisere Verlaufsdaten</h3><p>Feinere Zeiträume, mehrere Temperatursensoren, exakte Werte beim Überfahren und klar getrennte System- sowie Containeransichten.</p></article>
+          <article class="roadmap-card"><span class="roadmap-status status-planned">Geplant</span><h3>Mehr Übersicht</h3><p>Größere und responsive Kacheln, dauerhaft auswählbare Kacheln sowie Download ausgewählter Statistikdaten.</p></article>
+          <article class="roadmap-card"><span class="roadmap-status status-planned">Geplant</span><h3>React + TypeScript</h3><p>Schrittweise Migration des Frontends, damit komplexe Ansichten komponentenbasiert, typgesichert und langfristig wartbar bleiben.</p></article>
+        </div>
+      </div>
+
+      <div class="roadmap-group">
+        <div class="roadmap-group-heading">
+          <span class="roadmap-number">02</span>
+          <div><p class="eyebrow">Danach</p><h2>Mehr Daten und verlässlicher Betrieb</h2><p>Weitere Quellen, längere Aufbewahrung und sichere Wiederherstellung.</p></div>
+        </div>
+        <div class="roadmap-grid">
+          <article class="roadmap-card"><span class="roadmap-status status-planned">Geplant</span><h3>Nicht-Docker-Anwendungen</h3><p>Ausgewählte native Dienste und Programme wie Duplicati oder Nextcloud mit Prozessstatus sowie CPU- und RAM-Verlauf überwachen.</p></article>
+          <article class="roadmap-card"><span class="roadmap-status status-planned">Geplant</span><h3>Konfigurierbare Aufbewahrung</h3><p>Längere Speicherung von Ereignissen und Berichten mit individuell wählbaren Aufbewahrungszeiten.</p></article>
+          <article class="roadmap-card"><span class="roadmap-status status-planned">Geplant</span><h3>Backups und Wiederherstellung</h3><p>Automatische Sicherungen von Einstellungen und Historie mit einem dokumentierten und getesteten Wiederherstellungsablauf.</p></article>
+          <article class="roadmap-card"><span class="roadmap-status status-current">In Arbeit</span><h3>Installation und Releases</h3><p>Vorbereitete Images gibt es bereits. Als Nächstes folgen verbindliche CI-Prüfungen, Changelogs und ein einheitlicher Release-Prozess.</p></article>
+        </div>
+      </div>
+
+      <div class="roadmap-group">
+        <div class="roadmap-group-heading">
+          <span class="roadmap-number">03</span>
+          <div><p class="eyebrow">Neue Clients</p><h2>NodeSentinel überall dabei</h2><p>Die Weboberfläche bleibt erhalten. Native Apps ergänzen sie als sichere Alternative.</p></div>
+        </div>
+        <div class="roadmap-grid roadmap-grid--wide">
+          <article class="roadmap-card roadmap-card--wide">
+            <span class="roadmap-status status-planned">Geplant</span>
+            <h3>Windows-, Linux- und Android-Apps</h3>
+            <p>Geplant sind eine Windows-App für den Microsoft Store, eine Linux-Desktop-App zunächst über Flathub sowie eine Android-App für den Google Play Store.</p>
+            <ul class="roadmap-list">
+              <li><Icon name="check" size={15} />Eigene, widerrufbare App-Tokens</li>
+              <li><Icon name="check" size={15} />Gemeinsame und versionierte Client-API</li>
+              <li><Icon name="check" size={15} />Sichere lokale Speicherung von Zugangsdaten</li>
+              <li><Icon name="check" size={15} />Hosts, Verläufe, Warnungen und Erreichbarkeit unterwegs</li>
+            </ul>
+          </article>
+          <article class="roadmap-card"><span class="roadmap-status status-blocked">Blockiert</span><h3>iOS-App</h3><p>Die Client-Schnittstelle wird so gestaltet, dass eine spätere iOS-App möglich bleibt. Umsetzung und Veröffentlichung sind aktuell durch fehlende Apple-Hardware und das fehlende Budget blockiert.</p></article>
+        </div>
+      </div>
+
+      <div class="roadmap-group">
+        <div class="roadmap-group-heading">
+          <span class="roadmap-number">04</span>
+          <div><p class="eyebrow">Längerfristig</p><h2>Zusammenarbeit und sichere Anmeldung</h2></div>
+        </div>
+        <div class="roadmap-grid">
+          <article class="roadmap-card"><span class="roadmap-status status-outlook">Ausblick</span><h3>Mehrere Benutzer</h3><p>Getrennte Konten und Rollen für Haushalte, Teams oder gemeinsam betriebene Systeme.</p></article>
+          <article class="roadmap-card"><span class="roadmap-status status-outlook">Ausblick</span><h3>OAuth und OIDC</h3><p>Anmeldung über bestehende Identitätsdienste wie Authentik oder Authelia, ohne die lokale Anmeldung zu entfernen.</p></article>
+        </div>
+      </div>
+
+      <div class="roadmap-note">
+        <div><p class="eyebrow">Mitgestalten</p><h2>Welche Funktion brauchst du zuerst?</h2><p>Fehlerberichte, konkrete Anwendungsfälle und begründete Prioritäten helfen bei der weiteren Planung.</p></div>
+        <a class="button" href="https://github.com/TheArchitect998/NodeSentinel/issues" target="_blank" rel="noreferrer">Issue auf GitHub öffnen <Icon name="external" size={17} /></a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
