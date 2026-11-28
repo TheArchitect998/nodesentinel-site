@@ -20,6 +20,7 @@ const alternateLanguage = isEnglish ? 'de' : 'en';
 const homeHref = isEnglish ? '/en/' : '/';
 const docsHref = isEnglish ? '/en/docs/' : '/docs/';
 const roadmapHref = isEnglish ? '/en/roadmap/' : '/roadmap/';
+const changelogHref = isEnglish ? '/en/changelog/' : '/changelog/';
 const quickStartHref = isEnglish ? '/en/docs/quick-start/' : '/docs/schnellstart/';
 const imprintHref = isEnglish ? '/en/imprint/' : '/impressum/';
 const privacyHref = isEnglish ? '/en/privacy/' : '/datenschutz/';
@@ -28,13 +29,13 @@ const copy = isEnglish ? {
   start: 'Get started', menu: 'Open menu', mobileNav: 'Mobile navigation', quickStart: 'Quick start',
   footerTagline: 'Self-hosted monitoring for the systems that matter to you.', project: 'Project',
   legal: 'Legal', imprint: 'Imprint', privacy: 'Privacy', versions: 'Releases', report: 'Report a problem',
-  security: 'Security', switchLabel: 'Language', switchText: 'Deutsch'
+  security: 'Security', changelog: 'Changelog', switchLabel: 'Language', switchText: 'Deutsch'
 } : {
   skip: 'Zum Inhalt springen', home: 'NodeSentinel Startseite', nav: 'Hauptnavigation', docs: 'Dokumentation', roadmap: 'Roadmap',
   start: 'Jetzt starten', menu: 'Menü öffnen', mobileNav: 'Mobile Navigation', quickStart: 'Schnellstart',
   footerTagline: 'Selbst gehostetes Monitoring für Systeme, die dir wichtig sind.', project: 'Projekt',
   legal: 'Rechtliches', imprint: 'Impressum', privacy: 'Datenschutz', versions: 'Versionen', report: 'Problem melden',
-  security: 'Sicherheit', switchLabel: 'Sprache', switchText: 'English'
+  security: 'Sicherheit', changelog: 'Changelog', switchLabel: 'Sprache', switchText: 'English'
 };
 ---
 
@@ -111,6 +112,7 @@ const copy = isEnglish ? {
         <div>
           <h2>{copy.project}</h2>
           <a href={site.repository}>GitHub</a>
+          <a href={changelogHref}>{copy.changelog}</a>
           <a href={`${site.repository}/releases`}>{copy.versions}</a>
           <a href={`${site.repository}/issues`}>{copy.report}</a>
         </div>

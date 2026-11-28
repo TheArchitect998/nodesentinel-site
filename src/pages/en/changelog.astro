@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+
+const releases = [
+  { version: 'v2.4.3', date: '2026-11-25', title: 'New NodeSentinel branding', summary: 'The dashboard and login screen now use the new logo. Browser favicons and icons for desktop and iPhone shortcuts were also added.', url: 'https://github.com/TheArchitect998/NodeSentinel/releases/tag/v2.4.3' },
+  { version: 'v2.4.2', date: '2026-11-21', title: 'Correct Docker event timestamps', summary: 'Docker timestamps with nanoseconds are handled without precision loss, restoring reliable start and stop notifications.', url: 'https://github.com/TheArchitect998/NodeSentinel/releases/tag/v2.4.2' },
+  { version: 'v2.4.1', date: '2026-11-20', title: 'WebSocket push and fewer permissions', summary: 'New agents connect outbound over an encrypted connection. Docker, journal, and other privileged sources are disabled by default and enabled only when selected.', url: 'https://github.com/TheArchitect998/NodeSentinel/releases/tag/v2.4.1' },
+  { version: 'v2.4.0', date: '2026-11-19', title: 'Migration to Go', summary: 'The dashboard and agents now run as native Go binaries. Python is no longer required, and AMD64 and ARM64 images are published automatically.', url: 'https://github.com/TheArchitect998/NodeSentinel/releases/tag/v2.4.0' },
+  { version: 'v2.3.0', date: '2026-11-18', title: 'HomeLab Dashboard becomes NodeSentinel', summary: 'The project received a new name, NODESENTINEL environment variables, updated paths, and customizable cards. Legacy HOMELAB variables remain as a migration fallback.', url: 'https://github.com/TheArchitect998/NodeSentinel/releases/tag/v2.3.0' },
+  { version: 'v2.2.2', date: '2026-11-17', title: 'Hardware, availability, and stronger security', summary: 'Added TLS, required agent keys, container history, SMART, GPU, ZFS, battery metrics, and ping, HTTP, TCP, and DNS checks. Email, webhooks, and Gotify were added as alert providers.', url: 'https://github.com/TheArchitect998/NodeSentinel/releases/tag/v2.2.2' },
+  { version: 'v2.2.1', date: '2026-11-16', title: 'Docker, history, and notifications', summary: 'The dashboard and agents gained Docker Compose installation. Metrics are retained for 30 days, and Telegram, Discord, Ntfy, and Pushover can be used in parallel.', url: 'https://github.com/TheArchitect998/NodeSentinel/releases/tag/v2.2.1' },
+  { version: 'v2.2.0', date: '2026-11-14', title: 'Security and alerting features', summary: 'Added password protection, separate views, themes, adjustable font sizes, security events, and temperature alerts with daily reports.', url: 'https://github.com/TheArchitect998/NodeSentinel/releases/tag/v2.2.0' },
+  { version: 'v2.1.0', date: '2026-11-06', title: 'Multilingual dashboard', summary: 'German, English, and French can be selected in the dashboard, with the preference retained in the browser.', url: 'https://github.com/TheArchitect998/NodeSentinel/releases/tag/v2.1.0' },
+  { version: 'v2.0.0', date: '2026-11-06', title: 'Redesigned dashboard', summary: 'Introduced the responsive interface with host overview, metric cards, charts, container status, and security details.', url: 'https://github.com/TheArchitect998/NodeSentinel/releases/tag/v2.0.0' },
+];
+
+const formatDate = (date: string) => new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' }).format(new Date(`${date}T00:00:00Z`));
+---
+
+<BaseLayout lang="en" title="Changelog – NodeSentinel" description="NodeSentinel releases, improvements, and important upgrade notes in chronological order.">
+  <section class="changelog-hero">
+    <div class="shell">
+      <p class="eyebrow">Release history</p>
+      <h1>What is changing in NodeSentinel.</h1>
+      <p>Concise summaries of published versions. Complete notes, assets, and technical details are linked in each GitHub release.</p>
+      <a class="button button--secondary" href="https://github.com/TheArchitect998/NodeSentinel/releases" target="_blank" rel="noreferrer">All GitHub releases <Icon name="external" size={17} /></a>
+    </div>
+  </section>
+
+  <section class="section changelog-section">
+    <div class="shell changelog-list">
+      {releases.map((release, index) => (
+        <article class="changelog-entry">
+          <div class="changelog-version">
+            <span>{release.version}</span>
+            <time datetime={release.date}>{formatDate(release.date)}</time>
+            {index === 0 && <b>Current</b>}
+          </div>
+          <div>
+            <h2>{release.title}</h2>
+            <p>{release.summary}</p>
+            <a class="text-link" href={release.url} target="_blank" rel="noreferrer">Full release notes <Icon name="external" size={15} /></a>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

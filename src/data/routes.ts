@@ -11,6 +11,7 @@ export const localizedRoutes = [
   ['/docs/aktualisierung/', '/en/docs/updates/'],
   ['/docs/fehlerbehebung/', '/en/docs/troubleshooting/'],
   ['/roadmap/', '/en/roadmap/'],
+  ['/changelog/', '/en/changelog/'],
   ['/impressum/', '/en/imprint/'],
   ['/datenschutz/', '/en/privacy/'],
 ] as const;

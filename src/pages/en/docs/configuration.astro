@@ -40,7 +40,7 @@ docker compose restart dashboard`} />
   </table></div>
   <p>Outages are not stored as long-term history. Alerts and recoveries are sent to the selected channels.</p>
 
-  <h2>Data and backups</h2>
+  <h2 id="data-and-backups">Data and backups</h2>
   <p>Settings, login credentials and SQLite databases are stored in the dashboard state directory. Protect and back up that directory or the corresponding Docker volume. Run exactly one dashboard worker so writes do not compete.</p>
   <ul class="check-list"><li><strong>Resource history:</strong> 30 days</li><li><strong>Temperature and event data for reports:</strong> approximately 25 hours</li><li><strong>Offline periods:</strong> Missing agent measurements are not recreated after reconnection.</li></ul>
 </DocsLayout>
