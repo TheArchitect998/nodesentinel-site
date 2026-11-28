@@ -22,6 +22,7 @@ import { site } from '../../data/site';
           <span><Icon name="check" size={16} />AMD64 & ARM64</span>
           <span><Icon name="check" size={16} />No telemetry</span>
           <span><Icon name="check" size={16} />30-day history</span>
+          <span><Icon name="check" size={16} />Tested in our own homelab</span>
         </div>
       </div>
       <div class="dashboard-preview" aria-label="NodeSentinel dashboard preview">
@@ -29,7 +30,7 @@ import { site } from '../../data/site';
           <div class="preview-topbar">
             <div class="window-dots"><i></i><i></i><i></i></div>
             <span>nodesentinel.local</span>
-            <b>● LIVE</b>
+            <b>● PREVIEW</b>
           </div>
           <div class="preview-sidebar"><span class="preview-logo">N</span><i class="active"></i><i></i><i></i><i></i><i></i></div>
           <div class="preview-main">
@@ -40,7 +41,7 @@ import { site } from '../../data/site';
               <div><span>Systems</span><strong>8<small>/8</small></strong><p class="all-online">● All online</p></div>
             </div>
             <div class="preview-hosts">
-              <div class="preview-card-title"><strong>Systems</strong><span>Updated 4 seconds ago</span></div>
+              <div class="preview-card-title"><strong>Systems</strong><span>Sample data</span></div>
               {[
                 ['HomeServer', 'online', '24%', '41°'],
                 ['Docker-NAS', 'online', '38%', '37°'],
@@ -53,6 +54,7 @@ import { site } from '../../data/site';
           </div>
         </div>
         <div class="floating-alert"><span><Icon name="bell" size={18} /></span><div><strong>Everything is in the green</strong><small>All eight systems are reachable</small></div></div>
+        <p class="preview-caption">Illustrative product preview – not connected to live systems</p>
       </div>
     </div>
   </section>
@@ -124,6 +126,36 @@ docker compose run --rm dashboard \\
   /usr/local/bin/nodesentinel dashboard setup
 docker compose up -d`} />
         <div class="terminal-success"><Icon name="check" size={18} /><span>Dashboard ready at <code>http://localhost:8888</code></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section transparency-section">
+    <div class="shell">
+      <div class="section-heading centered">
+        <p class="eyebrow">Clear expectations</p>
+        <h2>Built for homelabs. Open about its limits.</h2>
+        <p>NodeSentinel is an independent, growing project. It focuses on understandable Linux monitoring while clearly explaining what is protected today and what operators still need to secure.</p>
+      </div>
+      <div class="trust-grid">
+        <article>
+          <span class="feature-icon"><Icon name="github" size={23} /></span>
+          <h3>Open and reviewable</h3>
+          <p>Go source code, release history, security documentation, and public plans remain accessible. Planned features are shown as roadmap goals rather than current promises.</p>
+          <a class="text-link" href="/en/roadmap/">View roadmap <Icon name="arrow" size={17} /></a>
+        </article>
+        <article>
+          <span class="feature-icon"><Icon name="shield" size={23} /></span>
+          <h3>Security boundaries explained</h3>
+          <p>Agent keys, TLS, and minimal default permissions are included. Docker socket, journal, UFW, or SMART access expands the trust boundary and is enabled only deliberately.</p>
+          <a class="text-link" href="/en/docs/security/">Security model <Icon name="arrow" size={17} /></a>
+        </article>
+        <article>
+          <span class="feature-icon"><Icon name="box" size={23} /></span>
+          <h3>Prepare for sensitive deployments</h3>
+          <p>Before important or professional use, evaluate retention, automatic backups, roles, recovery, and release acceptance requirements against your environment.</p>
+          <a class="text-link" href="/en/docs/configuration/#data-and-backups">Data and backups <Icon name="arrow" size={17} /></a>
+        </article>
       </div>
     </div>
   </section>

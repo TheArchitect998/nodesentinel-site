@@ -22,6 +22,7 @@ import { site } from '../data/site';
           <span><Icon name="check" size={16} />AMD64 & ARM64</span>
           <span><Icon name="check" size={16} />Keine Telemetrie</span>
           <span><Icon name="check" size={16} />30 Tage Verlauf</span>
+          <span><Icon name="check" size={16} />Im eigenen Homelab getestet</span>
         </div>
       </div>
       <div class="dashboard-preview" aria-label="Darstellung des NodeSentinel Dashboards">
@@ -29,7 +30,7 @@ import { site } from '../data/site';
           <div class="preview-topbar">
             <div class="window-dots"><i></i><i></i><i></i></div>
             <span>nodesentinel.local</span>
-            <b>● LIVE</b>
+            <b>● VORSCHAU</b>
           </div>
           <div class="preview-sidebar">
             <span class="preview-logo">N</span>
@@ -43,7 +44,7 @@ import { site } from '../data/site';
               <div><span>Systeme</span><strong>8<small>/8</small></strong><p class="all-online">● Alle online</p></div>
             </div>
             <div class="preview-hosts">
-              <div class="preview-card-title"><strong>Systeme</strong><span>Aktualisiert vor 4 s</span></div>
+              <div class="preview-card-title"><strong>Systeme</strong><span>Beispieldaten</span></div>
               {[
                 ['HomeServer', 'online', '24%', '41°'],
                 ['Docker-NAS', 'online', '38%', '37°'],
@@ -56,6 +57,7 @@ import { site } from '../data/site';
           </div>
         </div>
         <div class="floating-alert"><span><Icon name="bell" size={18} /></span><div><strong>Alles im grünen Bereich</strong><small>Alle acht Systeme sind erreichbar</small></div></div>
+        <p class="preview-caption">Illustrative Produktansicht – nicht mit Live-Systemen verbunden</p>
       </div>
     </div>
   </section>
@@ -129,6 +131,36 @@ docker compose run --rm dashboard \\
   /usr/local/bin/nodesentinel dashboard setup
 docker compose up -d`} />
         <div class="terminal-success"><Icon name="check" size={18} /><span>Dashboard bereit unter <code>http://localhost:8888</code></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section transparency-section">
+    <div class="shell">
+      <div class="section-heading centered">
+        <p class="eyebrow">Ehrlich eingeordnet</p>
+        <h2>Für das Homelab gebaut. Grenzen sichtbar gemacht.</h2>
+        <p>NodeSentinel ist ein unabhängiges, wachsendes Projekt. Es konzentriert sich auf nachvollziehbares Linux-Monitoring und erklärt bewusst, was bereits geschützt ist und was du selbst absichern musst.</p>
+      </div>
+      <div class="trust-grid">
+        <article>
+          <span class="feature-icon"><Icon name="github" size={23} /></span>
+          <h3>Offen und nachvollziehbar</h3>
+          <p>Go-Code, Release-Historie, Sicherheitsdokumentation und öffentliche Planung bleiben einsehbar. Neue Funktionen werden als Roadmap-Ziele und nicht als verfügbare Zusagen dargestellt.</p>
+          <a class="text-link" href="/roadmap/">Roadmap ansehen <Icon name="arrow" size={17} /></a>
+        </article>
+        <article>
+          <span class="feature-icon"><Icon name="shield" size={23} /></span>
+          <h3>Sicherheitsgrenzen erklärt</h3>
+          <p>Agent-Schlüssel, TLS und minimale Standardrechte sind vorgesehen. Docker-Socket, Journal, UFW oder SMART erweitern jedoch die Vertrauensgrenze und werden nur bewusst aktiviert.</p>
+          <a class="text-link" href="/docs/sicherheit/">Sicherheitsmodell <Icon name="arrow" size={17} /></a>
+        </article>
+        <article>
+          <span class="feature-icon"><Icon name="box" size={23} /></span>
+          <h3>Für sensible Einsätze vorbereiten</h3>
+          <p>Für wichtige oder professionelle Umgebungen solltest du den 30-Tage-Verlauf, automatische Backups, Rollen, Wiederherstellung und Freigaben vor dem Produktivbetrieb selbst bewerten.</p>
+          <a class="text-link" href="/docs/konfiguration/#daten-und-backups">Daten und Backups <Icon name="arrow" size={17} /></a>
+        </article>
       </div>
     </div>
   </section>

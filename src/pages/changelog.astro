@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+
+const releases = [
+  { version: 'v2.4.3', date: '25.11.2026', title: 'Neues NodeSentinel-Design', summary: 'Das Dashboard und die Anmeldung verwenden das neue Logo. Ergänzt wurden Favicons und Symbole für Desktop- sowie iPhone-Verknüpfungen.', url: 'https://github.com/TheArchitect998/NodeSentinel/releases/tag/v2.4.3' },
+  { version: 'v2.4.2', date: '21.11.2026', title: 'Korrekte Docker-Ereigniszeiten', summary: 'Docker-Zeitstempel mit Nanosekunden werden ohne Genauigkeitsverlust verarbeitet. Start- und Stoppereignisse erreichen konfigurierte Benachrichtigungskanäle wieder zuverlässig.', url: 'https://github.com/TheArchitect998/NodeSentinel/releases/tag/v2.4.2' },
+  { version: 'v2.4.1', date: '20.11.2026', title: 'WebSocket-Push und weniger Berechtigungen', summary: 'Neue Agenten verbinden sich ausgehend und verschlüsselt mit dem Dashboard. Docker, Journal und weitere privilegierte Quellen sind standardmäßig deaktiviert und werden nur bewusst eingeschaltet.', url: 'https://github.com/TheArchitect998/NodeSentinel/releases/tag/v2.4.1' },
+  { version: 'v2.4.0', date: '19.11.2026', title: 'Umstellung auf Go', summary: 'Dashboard und Agent laufen als native Go-Binaries. Python wird nicht mehr benötigt; AMD64- und ARM64-Images werden automatisch veröffentlicht.', url: 'https://github.com/TheArchitect998/NodeSentinel/releases/tag/v2.4.0' },
+  { version: 'v2.3.0', date: '18.11.2026', title: 'Aus HomeLab Dashboard wird NodeSentinel', summary: 'Neuer Projektname, neue NODESENTINEL-Variablen, aktualisierte Pfade und anpassbare Kacheln. Ältere HOMELAB-Variablen bleiben während der Migration als Fallback erhalten.', url: 'https://github.com/TheArchitect998/NodeSentinel/releases/tag/v2.3.0' },
+  { version: 'v2.2.2', date: '17.11.2026', title: 'Hardware, Erreichbarkeit und mehr Sicherheit', summary: 'TLS, verpflichtende Agent-Schlüssel, Container-Verläufe, SMART, GPU, ZFS, Akkustand sowie Ping-, HTTP-, TCP- und DNS-Prüfungen wurden ergänzt. E-Mail, Webhooks und Gotify kamen als Alarmkanäle hinzu.', url: 'https://github.com/TheArchitect998/NodeSentinel/releases/tag/v2.2.2' },
+  { version: 'v2.2.1', date: '16.11.2026', title: 'Docker, Verlauf und Benachrichtigungen', summary: 'Dashboard und Agenten lassen sich per Docker Compose betreiben. Metriken bleiben 30 Tage erhalten; Telegram, Discord, Ntfy und Pushover können parallel verwendet werden.', url: 'https://github.com/TheArchitect998/NodeSentinel/releases/tag/v2.2.1' },
+  { version: 'v2.2.0', date: '14.11.2026', title: 'Sicherheits- und Alarmfunktionen', summary: 'Passwortschutz, getrennte Ansichten, Themes, einstellbare Schriftgrößen, Sicherheitsereignisse und Temperaturwarnungen mit Tagesberichten kamen hinzu.', url: 'https://github.com/TheArchitect998/NodeSentinel/releases/tag/v2.2.0' },
+  { version: 'v2.1.0', date: '06.11.2026', title: 'Mehrsprachiges Dashboard', summary: 'Deutsch, Englisch und Französisch können im Dashboard ausgewählt werden. Die Einstellung bleibt im Browser gespeichert.', url: 'https://github.com/TheArchitect998/NodeSentinel/releases/tag/v2.1.0' },
+  { version: 'v2.0.0', date: '06.11.2026', title: 'Neu gestaltetes Dashboard', summary: 'Responsive Oberfläche mit Hostübersicht, Metrikkacheln, Diagrammen, Containerstatus und Sicherheitsdetails.', url: 'https://github.com/TheArchitect998/NodeSentinel/releases/tag/v2.0.0' },
+];
+---
+
+<BaseLayout title="Changelog – NodeSentinel" description="Veröffentlichungen, Verbesserungen und wichtige Update-Hinweise für NodeSentinel in chronologischer Übersicht.">
+  <section class="changelog-hero">
+    <div class="shell">
+      <p class="eyebrow">Release-Historie</p>
+      <h1>Was sich in NodeSentinel ändert.</h1>
+      <p>Kurze Zusammenfassungen der veröffentlichten Versionen. Vollständige Hinweise, Assets und technische Details sind im jeweiligen GitHub-Release verlinkt.</p>
+      <a class="button button--secondary" href="https://github.com/TheArchitect998/NodeSentinel/releases" target="_blank" rel="noreferrer">Alle Releases auf GitHub <Icon name="external" size={17} /></a>
+    </div>
+  </section>
+
+  <section class="section changelog-section">
+    <div class="shell changelog-list">
+      {releases.map((release, index) => (
+        <article class="changelog-entry">
+          <div class="changelog-version">
+            <span>{release.version}</span>
+            <time datetime={release.date.split('.').reverse().join('-')}>{release.date}</time>
+            {index === 0 && <b>Aktuell</b>}
+          </div>
+          <div>
+            <h2>{release.title}</h2>
+            <p>{release.summary}</p>
+            <a class="text-link" href={release.url} target="_blank" rel="noreferrer">Vollständige Release Notes <Icon name="external" size={15} /></a>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>
